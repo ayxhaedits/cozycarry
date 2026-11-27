@@ -9,9 +9,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
 /* ============================================================
-   PART 1 — CSS (tumhara existing CSS — same, no change)
+   PART 1 — MAIN STOREFRONT CSS
    ============================================================ */
 :root{
   --primary:#0f3d2e;
@@ -179,150 +180,118 @@ input[type="file"]{width:100%;border:1.5px dashed var(--line-strong);border-radi
 input[type="file"]:hover{border-color:var(--primary);background:var(--primary-soft)}
 input[type="file"]::file-selector-button{appearance:none;border:1px solid var(--primary);background:var(--primary);color:#fff;font-weight:600;font-size:12px;padding:7px 14px;border-radius:6px;margin-right:12px;cursor:pointer;font-family:inherit;transition:background .2s,transform .2s}
 input[type="file"]::file-selector-button:hover{background:#0b3125;transform:translateY(-1px)}
-input[type="file"]::-webkit-file-upload-button{appearance:none;border:1px solid var(--primary);background:var(--primary);color:#fff;font-weight:600;font-size:12px;padding:7px 14px;border-radius:6px;margin-right:12px;cursor:pointer;font-family:inherit;transition:background .2s}
 input[type="checkbox"],input[type="radio"]{accent-color:var(--primary);width:16px;height:16px;cursor:pointer;vertical-align:middle;margin-right:6px}
 label{color:#3a433d}
 input[type="color"]{width:100%;height:42px;border:1px solid var(--line);border-radius:var(--radius-sm);padding:4px;cursor:pointer;background:#fff}
 .full{width:100%;padding:12px;border-radius:var(--radius-sm);background:var(--primary);color:#fff;font-weight:700;font-size:14px;transition:transform .2s var(--ease),background .2s,box-shadow .2s}
 .full:hover{background:#0b3125;transform:translateY(-1px);box-shadow:var(--shadow-md)}
 .tabs{display:flex;gap:8px;margin:18px 0}
-.tabs button{flex:1;padding:9px;border-radius:var(--radius-sm);background:#f1f0eb;font-weight:600;font-size:13px;color:#4c554f;transition:background .2s,color .2s}
-.tabs button.active{background:var(--primary);color:#fff}
-.tabs button:hover:not(.active){background:#e5e3dc}
-.drawer{position:fixed;z-index:120;inset:0;background:rgba(14,20,17,.6);backdrop-filter:blur(3px);display:none;justify-content:flex-end}
+.tabs button{flex:1;padding:9px;border-radius:var(--radius-sm);background:#f1f0eb;font-weight:600;color:var(--muted);transition:all .2s}
+.tabs button.active{background:var(--primary);color:#fff;box-shadow:var(--shadow-sm)}
+.drawer{position:fixed;inset:0;z-index:90;background:rgba(10,15,12,.55);backdrop-filter:blur(4px);display:none;justify-content:flex-end;transition:opacity .3s}
 .drawer.show{display:flex}
-.drawerpanel{background:var(--surface);width:min(440px,100%);height:100%;padding:22px;display:flex;flex-direction:column;box-shadow:-12px 0 48px rgba(0,0,0,.2);animation:slideIn .3s var(--ease)}
-@keyframes slideIn{from{transform:translateX(40px);opacity:.6}to{transform:none;opacity:1}}
-.drawerhead{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding-bottom:15px}
-.drawerhead h2{font:700 22px var(--head)}
-.cartitems{overflow:auto;flex:1;padding:15px 0}
-.cartitem{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
-.cartitem img{width:75px;height:75px;border-radius:var(--radius-sm);object-fit:cover;background:#f1f0eb}
-.qty{display:flex;gap:8px;align-items:center;margin-top:8px}
-.qty button{border:1px solid var(--line);width:26px;height:26px;border-radius:6px;background:#fff;font-size:13px;color:#4c554d;transition:all .2s}
-.qty button:hover{background:var(--primary);border-color:var(--primary);color:#fff}
-.drawerfoot{border-top:1px solid var(--line);padding-top:16px}
-.adminbtn{position:fixed;right:18px;bottom:18px;z-index:60;background:#fff;border:1px solid var(--line);border-radius:9px;padding:10px 17px;box-shadow:var(--shadow-md);font-weight:700;font-size:12px}
-.adminbtn{display:none!important}
-.adminoverlay{position:fixed;inset:0;background:rgba(14,20,17,.6);z-index:150;display:none}
-.adminoverlay.show{display:block}
-.adminpanel{position:fixed;z-index:151;right:0;top:0;height:100%;width:min(900px,100%);background:var(--surface);transform:translateX(100%);transition:.3s var(--ease);display:flex;flex-direction:column;box-shadow:var(--shadow-lg)}
-.adminpanel.show{transform:none}
-.adminhead{padding:18px 22px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
-.adminhead h2{font:700 22px var(--head)}
-.adminnav{display:flex;gap:5px;overflow:auto;padding:10px 18px;border-bottom:1px solid var(--line);background:#f6f5f1}
-.adminnav button{white-space:nowrap;padding:9px 13px;border-radius:7px;font-size:12px;font-weight:600;color:#4c554f;transition:background .2s,color .2s}
-.adminnav button.active{background:var(--primary);color:#fff}
-.adminnav button:hover:not(.active){background:#e5e3dc}
-.adminbody{padding:22px;overflow:auto;flex:1}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:15px 0 22px}
-.stat,.panelbox{border:1px solid var(--line);border-radius:10px;padding:15px;background:#fff;margin-bottom:14px;box-shadow:var(--shadow-sm)}
-.stat small{display:block;color:#8a938d;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em}
-.stat b{font-size:22px;color:var(--ink)}
-.adminbody h3{font:700 20px var(--head);margin-bottom:15px}
-.adminbody h4{font-size:14px;margin:14px 0 8px}
-.adminbody .field{margin:9px 0}
-.adminbody .field input,.adminbody .field select,.adminbody .field textarea{padding:9px}
-.adminaction{background:var(--primary);color:#fff;padding:9px 13px;border-radius:7px;font-size:12px;font-weight:700;margin:3px;transition:transform .2s var(--ease),background .2s,box-shadow .2s}
-.adminaction:hover{background:#0b3125;transform:translateY(-1px);box-shadow:var(--shadow-sm)}
-.secondary{background:#fff;color:#3a433d;border:1px solid var(--line)}
-.secondary:hover{background:var(--primary-soft);border-color:var(--primary);color:var(--primary)}
-.danger{background:#b83232}
-.danger:hover{background:#9a2626}
-.tablewrap{overflow:auto;border-radius:10px;border:1px solid var(--line)}
-.admintable{width:100%;border-collapse:collapse;font-size:12px}
-.admintable th,.admintable td{padding:10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
-.admintable th{color:#6b736d;background:#f6f5f1;font-weight:600;text-transform:uppercase;font-size:11px;letter-spacing:.04em}
-.admintable tr:last-child td{border-bottom:none}
-.admintable tr:hover td{background:#fbfbf9}
-.thumb{width:42px;height:42px;border-radius:6px;object-fit:cover;background:#f1f0eb}
-.previewrow{display:flex;gap:10px;flex-wrap:wrap}
-.preview{width:90px;height:90px;position:relative}
-.preview img{width:100%;height:100%;border-radius:7px;object-fit:cover}
-.preview button{position:absolute;right:3px;top:3px;background:rgba(20,20,20,.85);color:#fff;border-radius:4px;padding:3px 6px;font-size:11px}
-.toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,80px);background:var(--ink);color:#fff;padding:11px 18px;border-radius:30px;z-index:300;transition:.25s var(--ease);font-size:13px;box-shadow:var(--shadow-lg)}
-.toast.show{transform:translate(-50%,0)}
-.reveal{opacity:0;transform:translateY(22px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
-.reveal.is-visible{opacity:1;transform:none}
-.brandmark img{width:100%;height:100%;object-fit:contain}
-button,.iconbtn,.cartbtn{transition:transform .2s ease,background .2s ease,box-shadow .2s ease}
-button:hover{transform:translateY(-1px)}
-.buybtn:hover,.primarybtn:hover,.adminaction:hover{transform:translateY(-2px);filter:brightness(1.04);box-shadow:0 8px 18px rgba(0,0,0,.08)}
-.cc-overlay{position:fixed;inset:0;z-index:3000;background:#f4f3ef;display:none;overflow:auto;color:#1d2823}
+.drawerpanel{width:min(420px,100%);height:100%;background:var(--surface);display:flex;flex-direction:column;animation:slideIn .35s var(--ease)}
+@keyframes slideIn{from{transform:translateX(100%)}to{transform:translateX(0)}}
+.drawerhead{display:flex;justify-content:space-between;align-items:center;padding:20px;border-bottom:1px solid var(--line)}
+.drawerhead h2{font:700 24px var(--head)}
+.drawerhead button{width:32px;height:32px;border-radius:50%;background:#f1f0eb;font-size:20px;line-height:1}
+.cartitems{flex:1;overflow:auto;padding:20px}
+.cartitem{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--line)}
+.cartitem img{width:70px;height:70px;border-radius:8px;object-fit:cover;background:#eee}
+.cartitem b{font-size:14px}
+.qty{display:flex;align-items:center;gap:8px;margin-top:8px}
+.qty button{width:24px;height:24px;border-radius:5px;background:#f1f0eb;font-weight:700;font-size:14px;line-height:1}
+.qty button:last-child{margin-left:auto;background:#fbecec;color:#d42a2a;width:auto;padding:0 8px;font-size:12px}
+.drawerfoot{padding:20px;border-top:1px solid var(--line);background:#fbfbf9}
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);background:var(--ink);color:#fff;padding:12px 20px;border-radius:30px;font-size:14px;font-weight:500;box-shadow:var(--shadow-lg);opacity:0;pointer-events:none;transition:all .3s var(--ease);z-index:9999}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.adminbtn{position:fixed;bottom:22px;left:22px;background:var(--ink);color:#fff;padding:11px 18px;border-radius:30px;font-size:13px;font-weight:600;z-index:60;box-shadow:var(--shadow-lg);transition:background .2s,transform .2s}
+.adminbtn:hover{background:#000;transform:translateY(-2px)}
+.empty-state{text-align:center;padding:60px 20px;grid-column:1/-1;background:#fff;border-radius:12px;border:1px dashed var(--line-strong)}
+
+/* ============================================================
+   PART 2 — ADMIN PANEL & CUSTOMER PORTAL CSS (MISSING STYLES ADDED)
+   ============================================================ */
+.cc-overlay{position:fixed;inset:0;background:#f4f6f8;z-index:200;display:none}
 .cc-overlay.open{display:block}
-.cc-admin{min-height:100vh;display:grid;grid-template-columns:260px minmax(0,1fr)}
-.cc-side{background:#0e2e24;color:#fff;padding:22px 15px;position:sticky;top:0;height:100vh;overflow:auto}
-.cc-side-brand{font:700 22px Georgia,serif;padding:10px 12px 24px;border-bottom:1px solid rgba(255,255,255,.13);margin-bottom:18px}
-.cc-side nav{display:grid;gap:4px}
-.cc-side button{width:100%;text-align:left;background:transparent;color:#c5d4cc;padding:11px 13px;border-radius:9px;font-size:13px;font-weight:500;transition:background .2s,color .2s}
-.cc-side button.active,.cc-side button:hover{background:rgba(255,255,255,.1);color:#fff}
-.cc-main{min-width:0;padding:28px clamp(16px,3vw,42px)}
-.cc-top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:26px}
-.cc-top h1{font:600 clamp(24px,3vw,34px) Georgia,serif;letter-spacing:-.01em}
-.cc-muted{color:#7a857e;font-size:13px}
-.cc-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:18px 0 24px}
-.cc-stat,.cc-card{background:#fff;border:1px solid #e7eae6;border-radius:15px;padding:18px;box-shadow:0 5px 20px rgba(14,46,36,.04);transition:box-shadow .2s}
-.cc-stat:hover,.cc-card:hover{box-shadow:0 8px 24px rgba(14,46,36,.07)}
-.cc-stat small{color:#7a857e;font-weight:500;font-size:12px}
-.cc-stat strong{display:block;font-size:25px;margin-top:8px;color:#0e2e24}
-.cc-card{margin:14px 0}
-.cc-card h3{font-size:17px;margin-bottom:14px;letter-spacing:-.01em}
-.cc-actions{display:flex;flex-wrap:wrap;gap:8px}
-.cc-btn{background:#173d2e;color:#fff;border-radius:9px;padding:10px 14px;font-size:13px;font-weight:600;transition:transform .2s var(--ease),background .2s,box-shadow .2s}
-.cc-btn:hover{background:#0e2e24;transform:translateY(-1px);box-shadow:0 6px 16px rgba(14,46,36,.18)}
-.cc-btn.alt{background:#edf2ee;color:#173d2e}
-.cc-btn.alt:hover{background:#dfe9e2}
-.cc-btn.danger{background:#a33d36;color:#fff}
-.cc-btn.danger:hover{background:#8a302a}
-.cc-table-wrap{overflow:auto;background:#fff;border:1px solid #e7eae6;border-radius:13px}
-.cc-table{border-collapse:collapse;width:100%;min-width:680px;font-size:13px}
-.cc-table th,.cc-table td{padding:12px 13px;text-align:left;border-bottom:1px solid #edf0ed;vertical-align:middle}
-.cc-table th{background:#f6f8f5;color:#5b6861;font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.04em}
-.cc-table tr:last-child td{border-bottom:none}
-.cc-table tr:hover td{background:#fbfcfb}
-.cc-thumb{width:48px;height:48px;object-fit:cover;border-radius:8px;background:#f0f1ed}
-.cc-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
-.cc-field{display:grid;gap:6px}
+.cc-admin{display:flex;height:100vh;width:100%;background:#f4f6f8}
+.cc-side{width:260px;background:#0a1c15;color:#fff;padding:20px 0;display:flex;flex-direction:column;overflow-y:auto}
+.cc-side-brand{padding:0 20px 20px;font:700 24px var(--head);border-bottom:1px solid rgba(255,255,255,.1);margin-bottom:15px}
+.cc-side nav{display:flex;flex-direction:column;padding:0 10px}
+.cc-side nav button{padding:12px 15px;text-align:left;color:#a9beb2;font-size:13px;font-weight:500;border-radius:8px;transition:all .2s;margin-bottom:2px}
+.cc-side nav button:hover,.cc-side nav button.active{background:rgba(255,255,255,.1);color:#fff}
+.cc-side > button{width:calc(100% - 20px);margin:0 10px;padding:10px;background:rgba(255,255,255,.05);color:#fff;border-radius:8px;font-size:13px;transition:background .2s}
+.cc-side > button:hover{background:rgba(255,255,255,.1)}
+.cc-main{flex:1;display:flex;flex-direction:column;overflow:hidden;background:#f8f9fa}
+.cc-top{display:flex;justify-content:space-between;align-items:center;padding:20px 30px;background:#fff;border-bottom:1px solid #e5e7eb}
+.cc-top h1{font:600 24px var(--head);color:#111}
+.cc-muted{color:#6b7280;font-size:13px;margin-top:4px}
+.cc-actions{display:flex;gap:10px;align-items:center}
+.cc-pill{background:#e5e7eb;color:#374151;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:600}
+.cc-btn{background:#0f3d2e;color:#fff;padding:8px 16px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;transition:background .2s}
+.cc-btn:hover{background:#0b3125}
+.cc-btn.alt{background:#fff;border:1px solid #d1d5db;color:#374151}
+.cc-btn.alt:hover{background:#f3f4f6}
+.cc-btn.danger{background:#dc2626;color:#fff}
+.cc-btn.danger:hover{background:#b91c1c}
+#ccAdminContent{padding:30px;overflow-y:auto;flex:1}
+.cc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:20px}
+.cc-stat{background:#fff;padding:20px;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.05);border:1px solid #e5e7eb}
+.cc-stat small{color:#6b7280;font-size:12px;text-transform:uppercase;letter-spacing:.05em;font-weight:600;display:block;margin-bottom:6px}
+.cc-stat strong{font-size:24px;color:#111}
+.cc-card{background:#fff;padding:24px;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.05);border:1px solid #e5e7eb;margin-bottom:20px}
+.cc-card h3{font:600 18px var(--head);color:#111;margin-bottom:15px;border-bottom:1px solid #f3f4f6;padding-bottom:10px}
+.cc-table-wrap{overflow-x:auto}
+.cc-table{width:100%;border-collapse:collapse;text-align:left}
+.cc-table th{padding:12px;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:#6b7280;border-bottom:2px solid #e5e7eb;background:#f9fafb}
+.cc-table td{padding:12px;border-bottom:1px solid #e5e7eb;font-size:14px;color:#374151;vertical-align:middle}
+.cc-table td img.cc-thumb{width:40px;height:40px;border-radius:6px;object-fit:cover;background:#f3f4f6}
+.cc-table td small{color:#6b7280;font-size:12px}
+.cc-table select{padding:6px;border:1px solid #d1d5db;border-radius:4px;font-size:13px;background:#fff}
+.cc-form{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.cc-field{display:flex;flex-direction:column;gap:6px}
 .cc-field.full{grid-column:1/-1}
-.cc-field label{font-size:12px;font-weight:650;color:#536159;letter-spacing:.01em}
-.cc-field input,.cc-field select,.cc-field textarea{width:100%;border:1px solid #dfe5df;background:#fff;border-radius:9px;padding:11px 12px;outline:none;color:#1c2821;font-size:14px;transition:border-color .2s,box-shadow .2s}
-.cc-field input:hover,.cc-field select:hover,.cc-field textarea:hover{border-color:#c5cec7}
-.cc-field input:focus,.cc-field select:focus,.cc-field textarea:focus{border-color:#47765f;box-shadow:0 0 0 3px rgba(71,118,95,.12)}
-.cc-field textarea{resize:vertical;font-family:inherit}
-.cc-field select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%235b6861' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:34px}
-.cc-field input[type="file"]{border-style:dashed;border-width:1.5px;background:#fbfcfb;cursor:pointer;color:#7a857e}
-.cc-field input[type="file"]:hover{border-color:#47765f;background:#f0f5f2}
-.cc-field input[type="file"]::file-selector-button{appearance:none;border:1px solid #173d2e;background:#173d2e;color:#fff;font-weight:600;font-size:12px;padding:7px 14px;border-radius:6px;margin-right:12px;cursor:pointer;font-family:inherit;transition:background .2s}
-.cc-field input[type="file"]::file-selector-button:hover{background:#0e2e24}
-.cc-field input[type="color"]{height:44px;padding:5px;cursor:pointer}
-.cc-checks{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
-.cc-checks label{font-size:13px;font-weight:500;color:#3a433d;display:inline-flex;align-items:center;cursor:pointer}
-.cc-checks input[type="checkbox"]{accent-color:#173d2e;width:16px;height:16px;cursor:pointer}
-.cc-pill{display:inline-block;background:#eef4ef;color:#315d46;padding:4px 9px;border-radius:30px;font-size:11px;font-weight:600;letter-spacing:.02em}
-.cc-customer{max-width:1100px;margin:40px auto;padding:20px}
-.cc-customer-head{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:22px}
-.cc-customer-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
-.cc-customer-tabs button{padding:10px 14px;border:1px solid #e2e6e2;border-radius:9px;background:#fff;font-weight:600;font-size:13px;color:#4c554f;transition:all .2s}
-.cc-customer-tabs button:hover{border-color:#173d2e;color:#173d2e}
-.cc-customer-tabs button.active{background:#173d2e;color:#fff;border-color:#173d2e}
-.cc-image-preview{display:flex;gap:10px;flex-wrap:wrap}
-.cc-image-preview img{width:88px;height:88px;object-fit:cover;border-radius:10px;border:1px solid #e4e8e3}
-.pimage{background:linear-gradient(135deg,#f1f0eb 0%,#e8e6df 100%)}
-@media(max-width:1050px){.nav{gap:0}.navlink{padding:0 8px;font-size:12px}.search{width:180px}.grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:900px){.cc-admin{grid-template-columns:1fr}.cc-side{position:relative;height:auto;padding:12px}.cc-side nav{display:flex;overflow:auto}.cc-side nav button{white-space:nowrap;width:auto}.cc-side-brand{padding:8px 10px 12px;margin-bottom:10px}.cc-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:760px){.headrow{height:auto;min-height:68px;flex-wrap:wrap;gap:10px;padding:10px 0}.nav{order:3;flex-basis:100%;overflow:visible;height:44px}.navitem{height:44px}.navlink{font-size:12px;padding:0 9px}.headright{margin-left:auto}.search{display:none}.brandname{font-size:21px}.hero{height:570px;min-height:0}.hero-copy{left:8px;right:8px}.hero h1{font-size:42px}.hero p{font-size:14px}.catrail{gap:15px}.catcard{flex-basis:116px;width:116px;height:116px}.catcard img{width:100%;height:100%}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.pinfo{padding:12px}.ptitle{font-size:14px}.pactions{grid-template-columns:1fr}.outlinebtn,.buybtn{padding:9px}.catalogtop h2{font-size:26px}.filters{align-items:flex-start;flex-direction:column}.featuregrid{grid-template-columns:1fr}.footrow{flex-direction:column}.stats{grid-template-columns:repeat(2,1fr)}.adminbody{padding:14px}.adminnav{padding:8px}.hero-copy{padding:16px}.arrow{width:35px;height:35px}.secthead h2{font-size:29px}.section{padding-top:38px;padding-bottom:38px}.footer-main{grid-template-columns:1fr 1fr;gap:26px;padding:34px 0}.footer-brand-col{grid-column:1/-1}.footer-bottom{font-size:10px}}
-@media(max-width:560px){.cc-main{padding:17px 12px}.cc-grid{gap:9px}.cc-stat{padding:13px}.cc-stat strong{font-size:20px}.cc-form{grid-template-columns:1fr}.cc-top{align-items:flex-start}.cc-customer{padding:12px;margin:15px auto}}
-@media(max-width:420px){.catcard{flex-basis:100px;width:100px;height:100px}.catcard img{width:100%;height:100%}.footer-main{grid-template-columns:1fr 1fr;gap:18px}.footer-col a{font-size:12px}}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
-.empty-state{grid-column:1/-1;text-align:center;padding:60px 20px;background:#fff;border:1px dashed var(--line-strong);border-radius:16px}
-.empty-state h3{font:700 20px var(--head);margin-bottom:6px}
-.empty-state p{color:var(--muted);font-size:14px}
-option{padding:10px;background:#fff;color:var(--ink)}
+.cc-field label{font-size:13px;font-weight:600;color:#374151}
+.cc-field input,.cc-field select,.cc-field textarea{padding:10px 12px;border:1px solid #d1d5db;border-radius:6px;font-size:14px;transition:border-color .2s}
+.cc-field input:focus,.cc-field select:focus,.cc-field textarea:focus{border-color:#0f3d2e;outline:0;box-shadow:0 0 0 2px rgba(15,61,46,.1)}
+.cc-checks{display:flex;gap:15px;flex-wrap:wrap}
+.cc-checks label{display:flex;align-items:center;gap:6px;font-size:14px;cursor:pointer;font-weight:400}
+
+/* Customer Portal */
+.cc-customer{width:100%;height:100%;display:flex;flex-direction:column;background:#f8f9fa;overflow-y:auto}
+.cc-customer-head{display:flex;justify-content:space-between;align-items:center;padding:30px 40px;background:#fff;border-bottom:1px solid #e5e7eb}
+.cc-customer-tabs{display:flex;gap:10px;padding:20px 40px 0;background:#fff;border-bottom:1px solid #e5e7eb}
+.cc-customer-tabs button{padding:10px 15px;font-size:14px;font-weight:600;color:#6b7280;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s}
+.cc-customer-tabs button:hover{color:#111}
+.cc-customer-tabs button.active{color:#0f3d2e;border-bottom-color:#0f3d2e}
+#ccCustomerContent{padding:30px 40px;flex:1}
+
+/* Responsive */
+@media(max-width:900px){
+  .headrow{flex-wrap:wrap;height:auto;padding:15px 0;gap:15px}
+  .nav{order:3;width:100%;overflow-x:auto;border-top:1px solid var(--line);padding-top:10px}
+  .headright{flex:1;justify-content:flex-end;flex-wrap:wrap}
+  .search{width:100%;order:4;margin-top:10px}
+  .grid{grid-template-columns:repeat(2,1fr)}
+  .footer-main{grid-template-columns:1fr 1fr}
+  .cc-admin{flex-direction:column}
+  .cc-side{width:100%;flex-direction:row;overflow-x:auto;padding:10px}
+  .cc-side-brand{display:none}
+  .cc-side nav{flex-direction:row}
+  .cc-side > button{display:none}
+  .cc-form{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  .grid{grid-template-columns:1fr}
+  .footer-main{grid-template-columns:1fr}
+  .hero h1{font-size:32px}
+}
 </style>
 </head>
 <body>
+
 <!-- ============================================================
-     PART 1 — HTML BODY (tumhara existing HTML — same)
+     MAIN STOREFRONT HTML
      ============================================================ -->
 <div class="announce"><div class="ticker" id="announcement"><span>Complimentary express delivery on all orders over Rs. 5,000 across Pakistan</span><span>Complimentary express delivery on all orders over Rs. 5,000 across Pakistan</span></div></div>
 <header><div class="wrap headrow">
@@ -347,13 +316,18 @@ option{padding:10px;background:#fff;color:var(--ink)}
 <div class="wrap footer-bottom"><span>© <span id="footerYear"></span> <span id="footerbrand2">CozyCarry</span>. All rights reserved.</span><span>Curated with care · Pakistan</span></div>
 </footer>
 <button class="adminbtn" onclick="showAdmin()">Admin</button>
+
+<!-- ============================================================
+     MODALS & DRAWERS
+     ============================================================ -->
 <div class="drawer" id="cartdrawer"><div class="drawerpanel"><div class="drawerhead"><h2>Your Cart</h2><button onclick="$('cartdrawer').classList.remove('show')">✕</button></div><div class="cartitems" id="cartitems"></div><div class="drawerfoot"><b>Total: Rs. <span id="carttotal">0</span></b><button class="full" style="margin-top:14px" onclick="openCheckout()">Proceed to Checkout</button></div></div></div>
-<div class="overlay" id="authmodal"><div class="modal"><button class="close" onclick="closeModal('authmodal')">×</button><h2>My Account</h2><p class="muted">Sign in or create your customer account</p><div class="tabs"><button class="active" id="loginTab" onclick="authMode('login')">Sign In</button><button id="signupTab" onclick="authMode('signup')">Register</button></div><form id="authform" onsubmit="authSubmit(event,'login')"><div class="field" id="nameField" style="display:none"><label>Full name</label><input id="authName"></div><div class="field" id="phoneField" style="display:none"><label>Phone</label><input id="authPhone"></div><div class="field"><label>Email</label><input id="authEmail" type="email" required></div><div class="field"><label>Password</label><input id="authPass" type="password" minlength="6" required></div><button class="full" id="authSubmit">Sign In</button></form></div></div>
+<div class="overlay" id="authmodal"><div class="modal"><button class="close" onclick="closeModal('authmodal')">×</button><h2>My Account</h2><p class="muted">Sign in or create your customer account</p><div class="tabs" id="authTabs"><button class="active" id="loginTab" onclick="authMode('login')">Sign In</button><button id="signupTab" onclick="authMode('signup')">Register</button></div><form id="authform" onsubmit="authSubmit(event,'login')"><div class="field" id="nameField" style="display:none"><label>Full name</label><input id="authName" autocomplete="name"></div><div class="field" id="phoneField" style="display:none"><label>Phone</label><input id="authPhone" autocomplete="tel"></div><div class="field"><label>Email</label><input id="authEmail" type="email" autocomplete="email" required></div><div class="field"><label>Password</label><input id="authPass" type="password" minlength="6" autocomplete="current-password" required></div><button class="full" id="authSubmit">Sign In</button><button type="button" class="muted" id="forgotPassword" onclick="sendPasswordReset()" style="display:block;margin:12px auto 0;text-decoration:underline">Forgot password?</button></form><form id="passwordResetForm" onsubmit="saveNewPassword(event)" style="display:none"><p class="muted" style="margin:12px 0">Choose a new password for your account.</p><div class="field"><label>New password</label><input id="newAuthPass" type="password" minlength="6" autocomplete="new-password" required></div><div class="field"><label>Confirm new password</label><input id="confirmAuthPass" type="password" minlength="6" autocomplete="new-password" required></div><button class="full">Save New Password</button></form></div></div>
 <div class="overlay" id="productmodal"><div class="modal" id="productdetail"></div></div>
 <div class="overlay" id="checkoutmodal"><div class="modal"><button class="close" onclick="closeModal('checkoutmodal')">×</button><h2>Checkout</h2><p class="muted">Enter delivery details</p><form id="checkoutform" onsubmit="checkout(event)"><div class="field"><label>Full name</label><input id="cname" required></div><div class="field"><label>Phone</label><input id="cphone" required></div><div class="field"><label>Address</label><textarea id="caddress" required></textarea></div><div class="field"><label>City</label><input id="ccity" required></div><div class="field"><label>Notes</label><input id="cnotes"></div><div class="field"><label>Order method</label><select id="ccCheckoutMethod"><option value="website">Place Website Order</option><option value="whatsapp">Place Order via WhatsApp</option></select></div><button class="full">Place Order</button></form></div></div>
-<div class="adminoverlay" id="adminoverlay" onclick="closeAdmin()"></div>
-<aside class="adminpanel" id="adminpanel"><div class="adminhead"><h2>CozyCarry Admin Studio</h2><button onclick="closeAdmin()">✕</button></div><div class="adminnav" id="adminnav"><button data-tab="overview" class="active" onclick="adminNav('overview')">Overview</button><button data-tab="products" onclick="adminNav('products')">Products</button><button data-tab="categories" onclick="adminNav('categories')">Categories</button><button data-tab="slides" onclick="adminNav('slides')">Hero Slides</button><button data-tab="branding" onclick="adminNav('branding')">Branding</button><button data-tab="orders" onclick="adminNav('orders')">Orders</button><button data-tab="customers" onclick="adminNav('customers')">Customers</button><button data-tab="settings" onclick="adminNav('settings')">Settings</button></div><div class="adminbody" id="adminbody"></div></aside>
-<div class="toast" id="toast"></div>
+
+<!-- ============================================================
+     ADMIN PANEL & CUSTOMER PORTAL OVERLAYS
+     ============================================================ -->
 <div class="cc-overlay" id="ccAdminApp" aria-hidden="true">
  <div class="cc-admin">
   <aside class="cc-side"><div class="cc-side-brand">CozyCarry <small style="display:block;font:11px Arial;color:#a9beb2;letter-spacing:2px;margin-top:5px">CONTROL CENTER</small></div><nav id="ccAdminNav">
@@ -367,10 +341,14 @@ option{padding:10px;background:#fff;color:var(--ink)}
   <main class="cc-main"><div class="cc-top"><div><h1 id="ccPageTitle">Dashboard</h1><div class="cc-muted" id="ccPageSub">Your store at a glance</div></div><div class="cc-actions"><span class="cc-pill" id="ccAdminIdentity">Admin</span><button class="cc-btn alt" onclick="ccAdminPage('dashboard')">Refresh</button></div></div><div id="ccAdminContent"><p>Loading dashboard…</p></div></main>
  </div>
 </div>
+
 <div class="cc-overlay" id="ccCustomerApp" aria-hidden="true"><div class="cc-customer"><div class="cc-customer-head"><div><h1 style="font:600 30px Georgia,serif">My Account</h1><p class="cc-muted" id="ccCustomerEmail"></p></div><div class="cc-actions"><button class="cc-btn alt" onclick="ccCustomerClose()">Continue Shopping</button><button class="cc-btn" onclick="logout()">Sign Out</button></div></div><div class="cc-customer-tabs"><button class="active" onclick="ccCustomerTab('overview',this)">Overview</button><button onclick="ccCustomerTab('orders',this)">My Orders</button><button onclick="ccCustomerTab('wishlist',this)">Wishlist</button><button onclick="ccCustomerTab('notifications',this)">Notifications</button><button onclick="ccCustomerTab('profile',this)">Profile</button></div><div id="ccCustomerContent"></div></div></div>
+
+<div class="toast" id="toast"></div>
+
 <script>
 /* ============================================================
-   PART 1 — CORE JS (Storefront, Cart, Auth, Customer Portal)
+   CORE JS — Storefront, Cart, Auth, Customer Portal
    ============================================================ */
 const SUPABASE_URL = "https://tjekrbmmkqxrdqtmxdmz.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_S2GWeU3hgtnsDRGCR4mG6g_HqP-XjIY";
@@ -382,8 +360,6 @@ let category="All", subcategory="All", tag="All", featured=false, query="";
 let cart = JSON.parse(localStorage.getItem("cc_cart")||"[]");
 let wishlist = [];
 let user=null, isAdmin=false, ccProfile=null;
-let editProductId=null, editCategoryId=null, editSlideId=null;
-let ccSelectedImages=[];
 const CC_ROLES=['super_admin','admin'];
 
 const $ = id => document.getElementById(id);
@@ -416,11 +392,6 @@ async function loadAll(){
       db.from("store_settings").select("*").eq("id",1).maybeSingle(),
       db.from("announcements").select("*").eq("is_active",true).order("sort_order")
     ]);
-    if(c.error) console.warn("categories:",c.error);
-    if(p.error) console.warn("products:",p.error);
-    if(h.error) console.warn("slides:",h.error);
-    if(s.error) console.warn("settings:",s.error);
-    if(a.error) console.warn("announcements:",a.error);
     data.categories = c.data||[];
     data.products = p.data||[];
     data.slides = h.data||[];
@@ -558,35 +529,101 @@ async function checkout(e){
   cart=[]; saveCart(); $("checkoutmodal").classList.remove("show"); $("checkoutform").reset(); toast("Order submitted");
 }
 
-function openAuth(){ $("authmodal").classList.add("show"); }
+function openAuth(){
+  const modal=$("authmodal");
+  if(modal) modal.classList.add("show");
+  if($("authform")) $("authform").style.display="block";
+  if($("passwordResetForm")) $("passwordResetForm").style.display="none";
+  if($("authTabs")) $("authTabs").style.display="flex";
+  if($("forgotPassword")) $("forgotPassword").style.display="block";
+  authMode("login");
+}
+
 function authMode(mode){
   $("loginTab").classList.toggle("active",mode==="login");
   $("signupTab").classList.toggle("active",mode==="signup");
   $("nameField").style.display = mode==="signup"?"block":"none";
   $("phoneField").style.display = mode==="signup"?"block":"none";
+  $("authPass").autocomplete = mode==="signup" ? "new-password" : "current-password";
   $("authSubmit").textContent = mode==="signup"?"Create Account":"Sign In";
+  $("forgotPassword").style.display = mode==="login"?"block":"none";
   $("authform").onsubmit = e => authSubmit(e,mode);
+}
+
+async function finishSignIn(signedInUser){
+  user=signedInUser;
+  closeModal("authmodal");
+  await checkAdmin();
+  if(isAdmin){ toast("Admin signed in"); ccOpenAdmin(); return; }
+  toast("Signed in successfully");
+  await loadWishlist();
+  await ccCustomerOpen();
 }
 
 async function authSubmit(e,mode){
   e.preventDefault();
-  const email=$("authEmail").value, password=$("authPass").value;
+  const email=$("authEmail").value.trim().toLowerCase();
+  const password=$("authPass").value;
+  const submit=$("authSubmit");
+  submit.disabled=true; submit.textContent=mode==="signup"?"Creating account…":"Signing in…";
   try{
     let result;
-    if(mode==="signup") result = await db.auth.signUp({ email, password, options:{ data:{ full_name:$("authName").value, phone:$("authPhone").value } } });
-    else result = await db.auth.signInWithPassword({ email, password });
+    if(mode==="signup"){
+      result=await db.auth.signUp({email,password,options:{data:{full_name:$("authName").value.trim(),phone:$("authPhone").value.trim(),},emailRedirectTo:location.origin+location.pathname}});
+    } else {
+      result=await db.auth.signInWithPassword({email,password});
+    }
     if(result.error) throw result.error;
-    if(mode==="signup"){ toast("Account created. Check email if confirmation is enabled."); return; }
-    user=result.data.user;
-    closeModal("authmodal");
-    await checkAdmin();
-    if(isAdmin){ toast("Admin signed in"); ccOpenAdmin(); return; }
-    toast("Signed in");
-    await loadWishlist();
-    await ccCustomerOpen();
-  }catch(err){ toast(err.message); }
+    if(mode==="signup"){
+      if(result.data?.session && result.data?.user){ await finishSignIn(result.data.user); }
+      else { toast("Account created. Please check your email to confirm it, then sign in."); }
+      return;
+    }
+    if(!result.data?.user) throw new Error("Login succeeded but no user session was returned. Please try again.");
+    await finishSignIn(result.data.user);
+  }catch(err){
+    console.error("CozyCarry authentication error:",err);
+    let message=err.message||"Authentication failed";
+    if(/invalid login credentials/i.test(message)) message="Email or password is incorrect. If you recently recreated this account, use Forgot password to set a fresh password.";
+    else if(/email not confirmed/i.test(message)) message="Please confirm your email using the latest confirmation email before signing in.";
+    else if(/user already registered/i.test(message)) message="This email already has an account. Choose Sign In or use Forgot password.";
+    toast(message);
+  }finally{
+    submit.disabled=false;
+    submit.textContent=mode==="signup"?"Create Account":"Sign In";
+  }
 }
 
+async function sendPasswordReset(){
+  const email=$("authEmail").value.trim().toLowerCase();
+  if(!email){ toast("Enter your account email first."); $("authEmail").focus(); return; }
+  const btn=$("forgotPassword");
+  btn.disabled=true; btn.textContent="Sending reset email…";
+  try{
+    const {error}=await db.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname});
+    if(error) throw error;
+    toast("If this email belongs to an account, a fresh password reset link has been sent. Check inbox and spam.");
+  }catch(err){ toast("Could not send reset email: "+err.message); }
+  finally{ btn.disabled=false; btn.textContent="Forgot password?"; }
+}
+
+async function saveNewPassword(e){
+  e.preventDefault();
+  const password=$("newAuthPass").value;
+  if(password!==$("confirmAuthPass").value){ toast("Passwords do not match."); return; }
+  try{
+    const {data:updated,error}=await db.auth.updateUser({password});
+    if(error) throw error;
+    if(!updated?.user) throw new Error("Password update did not return a user.");
+    $("passwordResetForm").style.display="none";
+    $("authform").style.display="block";
+    $("authTabs").style.display="flex";
+    toast("Password updated. You can now sign in with your new password.");
+    await db.auth.signOut();
+    user=null; isAdmin=false; ccProfile=null;
+    authMode("login");
+  }catch(err){ toast("Password update failed: "+err.message); }
+}
 async function checkAdmin(){
   isAdmin=false; ccProfile=null;
   if(!user) return;
@@ -652,10 +689,23 @@ async function ccSaveProfile(e){
 }
 
 async function initSession(){
-  const { data:s } = await db.auth.getSession();
-  user = s.session?.user||null;
+  const {data:s,error}=await db.auth.getSession();
+  if(error) console.warn("Could not restore auth session:",error.message);
+  user=s?.session?.user||null;
   if(user){ await checkAdmin(); await loadWishlist(); }
-  db.auth.onAuthStateChange(async (_e,session)=>{ user=session?.user||null; if(user){ await checkAdmin(); await loadWishlist(); } });
+  db.auth.onAuthStateChange(async (event,session)=>{
+    user=session?.user||null;
+    if(event==="PASSWORD_RECOVERY"){
+      $("authmodal").classList.add("show");
+      $("authform").style.display="none";
+      $("authTabs").style.display="none";
+      $("passwordResetForm").style.display="block";
+      $("forgotPassword").style.display="none";
+      return;
+    }
+    if(user){ await checkAdmin(); await loadWishlist(); }
+    else { isAdmin=false; ccProfile=null; wishlist=[]; }
+  });
 }
 
 (async()=>{ await initSession(); await loadAll(); await trackVisit(); })();
@@ -692,6 +742,8 @@ window.removeCart=removeCart;
 window.checkout=checkout;
 window.authMode=authMode;
 window.authSubmit=authSubmit;
+window.sendPasswordReset=sendPasswordReset;
+window.saveNewPassword=saveNewPassword;
 window.ccCustomerOpen=ccCustomerOpen;
 window.ccCustomerClose=ccCustomerClose;
 window.ccCustomerTab=ccCustomerTab;
@@ -699,12 +751,10 @@ window.ccSaveProfile=ccSaveProfile;
 window.logout=logout;
 window.goSlide=goSlide;
 window.showAdmin=showAdmin;
-/* ============================================================
-   PART 2 — ADMIN PANEL CORE
-   Dashboard, Products, Categories, Subcategories, Orders, Customers
-   ============================================================ */
 
-// ---------- ADMIN OPEN / CLOSE ----------
+/* ============================================================
+   ADMIN PANEL CORE
+   ============================================================ */
 function ccOpenAdmin() {
   if (!db) { toast("Supabase connection is not configured"); return; }
   if (!isAdmin) { toast("Admin access required"); return; }
@@ -726,29 +776,15 @@ async function showAdmin() {
   user = s.session?.user || null;
   if (!user) { openAuth(); return; }
   await checkAdmin();
-  if (!isAdmin) { toast("This account is not an admin"); return; }
+  if (!isAdmin) { toast("Signed in, but this account has no admin role. Ask the project owner to grant admin access."); return; }
   ccOpenAdmin();
 }
 
-// ---------- ADMIN ROUTER ----------
 const CC_PAGE_TITLES = {
-  dashboard: "Dashboard",
-  products: "Product Management",
-  categories: "Categories",
-  subcategories: "Subcategories",
-  orders: "Order Management",
-  customers: "Customers",
-  wishlist: "Wishlist Activity",
-  reviews: "Product Reviews",
-  affiliate: "Affiliate Products",
-  sales: "Sales & Campaigns",
-  announcements: "Announcement Bar",
-  banners: "Hero Banners",
-  traffic: "Live Traffic",
-  reports: "Reports & Analytics",
-  expenses: "Billing & Expenses",
-  admins: "Admin Management",
-  central: "Central Brain"
+  dashboard: "Dashboard", products: "Product Management", categories: "Categories", subcategories: "Subcategories",
+  orders: "Order Management", customers: "Customers", wishlist: "Wishlist Activity", reviews: "Product Reviews",
+  affiliate: "Affiliate Products", sales: "Sales & Campaigns", announcements: "Announcement Bar", banners: "Hero Banners",
+  traffic: "Live Traffic", reports: "Reports & Analytics", expenses: "Billing & Expenses", admins: "Admin Management", central: "Central Brain"
 };
 
 function ccAdminPage(page) {
@@ -765,7 +801,6 @@ function ccAdminPage(page) {
   });
 }
 
-// ---------- QUERY HELPER ----------
 async function ccQuery(table, cols = "*") {
   const { data, error } = await db.from(table).select(cols);
   if (error) throw error;
@@ -776,232 +811,128 @@ function ccStat(label, value) {
   return `<div class="cc-stat"><small>${esc(label)}</small><strong>${esc(value)}</strong></div>`;
 }
 
-// ---------- RENDER ADMIN ----------
 async function ccRenderAdmin(page) {
   const el = $("ccAdminContent");
   el.innerHTML = '<p class="cc-muted">Loading…</p>';
 
-  // ---------- DASHBOARD ----------
   if (page === "dashboard") {
     const [ps, os, vs, ex] = await Promise.all([
-      ccQuery("products", "id"),
-      ccQuery("orders", "id,total,status,currency,created_at"),
-      ccQuery("page_visits", "id,created_at"),
-      ccQuery("expenses", "amount,currency")
+      ccQuery("products", "id"), ccQuery("orders", "id,total,status,currency,created_at"), ccQuery("page_visits", "id,created_at"), ccQuery("expenses", "amount,currency")
     ]);
     const revenue = os.filter(x => !["Cancelled", "Returned"].includes(x.status)).reduce((a, x) => a + Number(x.total || 0), 0);
     const pending = os.filter(x => x.status === "Pending").length;
     const active = vs.filter(x => Date.now() - new Date(x.created_at || 0).getTime() < 5 * 60 * 1000).length;
-    el.innerHTML = `
-      <div class="cc-grid">
-        ${ccStat("Products", ps.length)}
-        ${ccStat("Orders", os.length)}
-        ${ccStat("Pending Orders", pending)}
-        ${ccStat("Total Visits", vs.length)}
-        ${ccStat("Revenue (PKR)", "Rs. " + money(revenue))}
-        ${ccStat("Active (5 min)", active)}
-        ${ccStat("Expenses", ex.length)}
-        ${ccStat("Admin Role", ccProfile?.role || "admin")}
-      </div>
-      <div class="cc-card">
-        <h3>Quick actions</h3>
-        <div class="cc-actions">
-          <button class="cc-btn" onclick="ccProductForm()">+ Add Product</button>
-          <button class="cc-btn alt" onclick="ccCategoryForm()">+ Add Category</button>
-          <button class="cc-btn alt" onclick="ccAdminPage('orders')">Manage Orders</button>
-          <button class="cc-btn alt" onclick="ccAdminPage('central')">Central Brain</button>
-        </div>
-      </div>
-      <p class="cc-muted">Live visitor count = visits recorded in the last 5 minutes.</p>
-    `;
+    el.innerHTML = `<div class="cc-grid">${ccStat("Products", ps.length)}${ccStat("Orders", os.length)}${ccStat("Pending Orders", pending)}${ccStat("Total Visits", vs.length)}${ccStat("Revenue (PKR)", "Rs. " + money(revenue))}${ccStat("Active (5 min)", active)}${ccStat("Expenses", ex.length)}${ccStat("Admin Role", ccProfile?.role || "admin")}</div><div class="cc-card"><h3>Quick actions</h3><div class="cc-actions"><button class="cc-btn" onclick="ccProductForm()">+ Add Product</button><button class="cc-btn alt" onclick="ccCategoryForm()">+ Add Category</button><button class="cc-btn alt" onclick="ccAdminPage('orders')">Manage Orders</button><button class="cc-btn alt" onclick="ccAdminPage('central')">Central Brain</button></div></div><p class="cc-muted">Live visitor count = visits recorded in the last 5 minutes.</p>`;
     return;
   }
 
-  // ---------- PRODUCTS ----------
   if (page === "products") {
     const rows = await ccQuery("products");
-    el.innerHTML = `
-      <div class="cc-card">
-        <div class="cc-top">
-          <h3>Products (${rows.length})</h3>
-          <button class="cc-btn" onclick="ccProductForm()">+ Add Product</button>
-        </div>
-        <div class="cc-table-wrap">
-          <table class="cc-table">
-            <tr><th>Image</th><th>Product</th><th>Category</th><th>Price</th><th>Stock / Sold</th><th>Featured</th><th>Actions</th></tr>
-            ${rows.map(p => `
-              <tr>
-                <td><img class="cc-thumb" src="${esc(p.cover_image || p.images?.[0] || "")}"></td>
-                <td>${esc(p.name)}<br><small>${esc(p.tag || "")}</small></td>
-                <td>${esc(p.category)} / ${esc(p.subcategory || "")}</td>
-                <td>${esc(p.currency || "PKR")} ${money(p.price)}</td>
-                <td>${p.stock_quantity ?? (p.in_stock ? "Available" : "Out")} / ${p.sold_quantity || 0}</td>
-                <td>${p.featured ? "★ Yes" : "No"}</td>
-                <td>
-                  <button class="cc-btn alt" onclick="ccProductForm('${p.id}')">Edit</button>
-                  <button class="cc-btn danger" onclick="ccDelete('products','${p.id}','products')">Delete</button>
-                </td>
-              </tr>
-            `).join("")}
-          </table>
-        </div>
-      </div>
-    `;
+    el.innerHTML = `<div class="cc-card"><div class="cc-top"><h3>Products (${rows.length})</h3><button class="cc-btn" onclick="ccProductForm()">+ Add Product</button></div><div class="cc-table-wrap"><table class="cc-table"><tr><th>Image</th><th>Product</th><th>Category</th><th>Price</th><th>Stock / Sold</th><th>Featured</th><th>Actions</th></tr>${rows.map(p => `<tr><td><img class="cc-thumb" src="${esc(p.cover_image || p.images?.[0] || "")}"></td><td>${esc(p.name)}<br><small>${esc(p.tag || "")}</small></td><td>${esc(p.category)} / ${esc(p.subcategory || "")}</td><td>${esc(p.currency || "PKR")} ${money(p.price)}</td><td>${p.stock_quantity ?? (p.in_stock ? "Available" : "Out")} / ${p.sold_quantity || 0}</td><td>${p.featured ? "★ Yes" : "No"}</td><td><button class="cc-btn alt" onclick="ccProductForm('${p.id}')">Edit</button> <button class="cc-btn danger" onclick="ccDelete('products','${p.id}','products')">Delete</button></td></tr>`).join("")}</table></div></div>`;
     return;
   }
 
-  // ---------- CATEGORIES ----------
   if (page === "categories") {
     const rows = await ccQuery("categories");
-    el.innerHTML = `
-      <div class="cc-card">
-        <div class="cc-top">
-          <h3>Main Categories (${rows.length})</h3>
-          <button class="cc-btn" onclick="ccCategoryForm()">+ Add Category</button>
-        </div>
-        <div class="cc-table-wrap">
-          <table class="cc-table">
-            <tr><th>Image</th><th>Name</th><th>Subcategories</th><th>Status</th><th>Actions</th></tr>
-            ${rows.map(c => `
-              <tr>
-                <td><img class="cc-thumb" src="${esc(c.image_url || "")}"></td>
-                <td>${esc(c.name)}</td>
-                <td>${(c.subcategories || []).map(esc).join(", ") || "—"}</td>
-                <td>${c.is_active === false ? "Inactive" : "Active"}</td>
-                <td>
-                  <button class="cc-btn alt" onclick="ccCategoryForm('${c.id}')">Edit</button>
-                  <button class="cc-btn danger" onclick="ccDelete('categories','${c.id}','categories')">Delete</button>
-                </td>
-              </tr>
-            `).join("")}
-          </table>
-        </div>
-      </div>
-    `;
+    el.innerHTML = `<div class="cc-card"><div class="cc-top"><h3>Main Categories (${rows.length})</h3><button class="cc-btn" onclick="ccCategoryForm()">+ Add Category</button></div><div class="cc-table-wrap"><table class="cc-table"><tr><th>Image</th><th>Name</th><th>Subcategories</th><th>Status</th><th>Actions</th></tr>${rows.map(c => `<tr><td><img class="cc-thumb" src="${esc(c.image_url || "")}"></td><td>${esc(c.name)}</td><td>${(c.subcategories || []).map(esc).join(", ") || "—"}</td><td>${c.is_active === false ? "Inactive" : "Active"}</td><td><button class="cc-btn alt" onclick="ccCategoryForm('${c.id}')">Edit</button> <button class="cc-btn danger" onclick="ccDelete('categories','${c.id}','categories')">Delete</button></td></tr>`).join("")}</table></div></div>`;
     return;
   }
 
-  // ---------- SUBCATEGORIES ----------
   if (page === "subcategories") {
     const rows = await ccQuery("categories");
-    el.innerHTML = `
-      <div class="cc-card">
-        <h3>Subcategories (managed per category)</h3>
-        <p class="cc-muted">Subcategories are stored as an array on each category. Edit a category to manage its subcategories.</p>
-        ${rows.map(c => `
-          <div class="cc-card" style="margin:10px 0">
-            <b>${esc(c.name)}</b>
-            <p class="cc-muted">${(c.subcategories || []).map(esc).join(", ") || "No subcategories"}</p>
-            <button class="cc-btn alt" onclick="ccCategoryForm('${c.id}')">Edit subcategories</button>
-          </div>
-        `).join("") || '<p class="cc-muted">No categories yet.</p>'}
-      </div>
-    `;
+    el.innerHTML = `<div class="cc-card"><h3>Subcategories (managed per category)</h3><p class="cc-muted">Subcategories are stored as an array on each category. Edit a category to manage its subcategories.</p>${rows.map(c => `<div class="cc-card" style="margin:10px 0"><b>${esc(c.name)}</b><p class="cc-muted">${(c.subcategories || []).map(esc).join(", ") || "No subcategories"}</p><button class="cc-btn alt" onclick="ccCategoryForm('${c.id}')">Edit subcategories</button></div>`).join("") || '<p class="cc-muted">No categories yet.</p>'}</div>`;
     return;
   }
 
-  // ---------- ORDERS ----------
   if (page === "orders") {
     const rows = await ccQuery("orders");
     rows.sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0));
-    el.innerHTML = `
-      <div class="cc-card">
-        <h3>Orders (${rows.length})</h3>
-        <div class="cc-table-wrap">
-          <table class="cc-table">
-            <tr><th>Order</th><th>Customer</th><th>Total</th><th>Date</th><th>Status</th><th>Payment</th></tr>
-            ${rows.map(o => `
-              <tr>
-                <td>${esc(o.order_code || o.id)}</td>
-                <td>${esc(o.customer_name)}<br><small>${esc(o.phone)}</small></td>
-                <td>${esc(o.currency || "PKR")} ${money(o.total)}</td>
-                <td>${o.created_at ? new Date(o.created_at).toLocaleString() : ""}</td>
-                <td>
-                  <select onchange="ccSetOrderStatus('${o.id}',this.value)">
-                    ${["Pending","Confirmed","Processing","Shipped","Delivered","Cancelled","Returned"].map(st => `<option ${o.status === st ? "selected" : ""}>${st}</option>`).join("")}
-                  </select>
-                </td>
-                <td>${esc(o.payment_status || "Pending")}</td>
-              </tr>
-            `).join("") || '<tr><td colspan="6" class="cc-muted">No orders yet.</td></tr>'}
-          </table>
-        </div>
-      </div>
-    `;
+    el.innerHTML = `<div class="cc-card"><h3>Orders (${rows.length})</h3><div class="cc-table-wrap"><table class="cc-table"><tr><th>Order</th><th>Customer</th><th>Total</th><th>Date</th><th>Status</th><th>Payment</th></tr>${rows.map(o => `<tr><td>${esc(o.order_code || o.id)}</td><td>${esc(o.customer_name)}<br><small>${esc(o.phone)}</small></td><td>${esc(o.currency || "PKR")} ${money(o.total)}</td><td>${o.created_at ? new Date(o.created_at).toLocaleString() : ""}</td><td><select onchange="ccSetOrderStatus('${o.id}',this.value)">${["Pending","Confirmed","Processing","Shipped","Delivered","Cancelled","Returned"].map(st => `<option ${o.status === st ? "selected" : ""}>${st}</option>`).join("")}</select></td><td>${esc(o.payment_status || "Pending")}</td></tr>`).join("") || '<tr><td colspan="6" class="cc-muted">No orders yet.</td></tr>'}</table></div></div>`;
     return;
   }
 
-  // ---------- CUSTOMERS ----------
   if (page === "customers") {
     const rows = await ccQuery("profiles");
-    el.innerHTML = `
-      <div class="cc-card">
-        <h3>Customers & Profiles (${rows.length})</h3>
-        <div class="cc-table-wrap">
-          <table class="cc-table">
-            <tr><th>Name</th><th>Phone</th><th>Role</th><th>Joined</th></tr>
-            ${rows.map(x => `
-              <tr>
-                <td>${esc(x.full_name || x.id)}</td>
-                <td>${esc(x.phone || "—")}</td>
-                <td>${esc(x.role)}</td>
-                <td>${x.created_at ? new Date(x.created_at).toLocaleDateString() : ""}</td>
-              </tr>
-            `).join("")}
-          </table>
-        </div>
-        <p class="cc-muted">Email addresses are not exposed to the browser client.</p>
-      </div>
-    `;
+    el.innerHTML = `<div class="cc-card"><h3>Customers & Profiles (${rows.length})</h3><div class="cc-table-wrap"><table class="cc-table"><tr><th>Name</th><th>Phone</th><th>Role</th><th>Joined</th></tr>${rows.map(x => `<tr><td>${esc(x.full_name || x.id)}</td><td>${esc(x.phone || "—")}</td><td>${esc(x.role)}</td><td>${x.created_at ? new Date(x.created_at).toLocaleDateString() : ""}</td></tr>`).join("")}</table></div><p class="cc-muted">Email addresses are not exposed to the browser client.</p></div>`;
     return;
   }
 
-  // ---------- WISHLIST ----------
   if (page === "wishlist") {
     const rows = await ccQuery("wishlists");
-    el.innerHTML = `
-      <div class="cc-card">
-        <h3>Wishlist Records</h3>
-        <p>${rows.length} saved product records.</p>
-        <p class="cc-muted">Customer-level details are protected by RLS.</p>
-      </div>
-    `;
+    el.innerHTML = `<div class="cc-card"><h3>Wishlist Records</h3><p>${rows.length} saved product records.</p><p class="cc-muted">Customer-level details are protected by RLS.</p></div>`;
     return;
   }
 
-  // ---------- REVIEWS ----------
   if (page === "reviews") {
     const rows = await ccQuery("product_reviews");
-    el.innerHTML = `
-      <div class="cc-card">
-        <h3>Review Moderation (${rows.length})</h3>
-        <div class="cc-table-wrap">
-          <table class="cc-table">
-            <tr><th>Product</th><th>Rating</th><th>Review</th><th>Status</th><th>Action</th></tr>
-            ${rows.map(r => `
-              <tr>
-                <td>${esc(r.product_id)}</td>
-                <td>★ ${r.rating}</td>
-                <td>${esc(r.review_text)}</td>
-                <td>${esc(r.status)}</td>
-                <td>
-                  <button class="cc-btn alt" onclick="ccReviewStatus('${r.id}','approved')">Approve</button>
-                  <button class="cc-btn danger" onclick="ccReviewStatus('${r.id}','rejected')">Reject</button>
-                </td>
-              </tr>
-            `).join("") || '<tr><td colspan="5" class="cc-muted">No reviews yet.</td></tr>'}
-          </table>
-        </div>
-      </div>
-    `;
+    el.innerHTML = `<div class="cc-card"><h3>Review Moderation (${rows.length})</h3><div class="cc-table-wrap"><table class="cc-table"><tr><th>Product</th><th>Rating</th><th>Review</th><th>Status</th><th>Action</th></tr>${rows.map(r => `<tr><td>${esc(r.product_id)}</td><td>★ ${r.rating}</td><td>${esc(r.review_text)}</td><td>${esc(r.status)}</td><td><button class="cc-btn alt" onclick="ccReviewStatus('${r.id}','approved')">Approve</button> <button class="cc-btn danger" onclick="ccReviewStatus('${r.id}','rejected')">Reject</button></td></tr>`).join("") || '<tr><td colspan="5" class="cc-muted">No reviews yet.</td></tr>'}</table></div></div>`;
     return;
   }
 
-  // ---------- OTHER PAGES (Part 3 handles these) ----------
-  el.innerHTML = `<div class="cc-card"><h3>${esc(CC_PAGE_TITLES[page] || page)}</h3><p class="cc-muted">This section will be available in Part 3.</p></div>`;
+  if (page === "affiliate") {
+    const rows = await ccQuery("affiliate_products");
+    el.innerHTML = `<div class="cc-card"><div class="cc-top"><h3>Affiliate Products (${rows.length})</h3><button class="cc-btn" onclick="ccAffiliateForm()">+ Add Affiliate Product</button></div><div class="cc-table-wrap"><table class="cc-table"><tr><th>Image</th><th>Name</th><th>Price</th><th>Clicks</th><th>Actions</th></tr>${rows.map(r => `<tr><td><img class="cc-thumb" src="${esc(r.image_url || "")}"></td><td>${esc(r.name)}</td><td>${esc(r.currency || "PKR")} ${money(r.price)}</td><td>${r.clicks || 0}</td><td><button class="cc-btn alt" onclick="ccAffiliateForm('${r.id}')">Edit</button> <button class="cc-btn danger" onclick="ccDelete('affiliate_products','${r.id}','affiliate')">Delete</button></td></tr>`).join("") || '<tr><td colspan="5" class="cc-muted">No affiliate products yet.</td></tr>'}</table></div></div>`;
+    return;
+  }
+
+  if (page === "sales") {
+    const rows = await ccQuery("sale_campaigns");
+    el.innerHTML = `<div class="cc-card"><div class="cc-top"><h3>Sale Campaigns (${rows.length})</h3><button class="cc-btn" onclick="ccSaleForm()">+ Create Campaign</button></div>${rows.map(r => `<div class="cc-card" style="margin:10px 0"><b>${esc(r.title)}</b><p class="cc-muted">${esc(r.discount_percent)}% off · ${r.starts_at ? new Date(r.starts_at).toLocaleDateString() : ""} — ${r.ends_at ? new Date(r.ends_at).toLocaleDateString() : ""}</p><span class="cc-pill">${r.is_active ? "Active" : "Inactive"}</span><button class="cc-btn alt" onclick="ccSaleForm('${r.id}')">Edit</button> <button class="cc-btn danger" onclick="ccDelete('sale_campaigns','${r.id}','sales')">Delete</button></div>`).join("") || '<p class="cc-muted">No campaigns yet.</p>'}</div>`;
+    return;
+  }
+
+  if (page === "announcements") {
+    const rows = await ccQuery("announcements");
+    el.innerHTML = `<div class="cc-card"><div class="cc-top"><h3>Announcement Bar (${rows.length})</h3><button class="cc-btn" onclick="ccAnnouncementForm()">+ Add Announcement</button></div>${rows.map(r => `<div class="cc-card" style="margin:10px 0"><b>${esc(r.message)}</b><p class="cc-muted">Active: ${r.is_active ? "Yes" : "No"}</p><button class="cc-btn alt" onclick="ccAnnouncementForm('${r.id}')">Edit</button> <button class="cc-btn danger" onclick="ccDelete('announcements','${r.id}','announcements')">Delete</button></div>`).join("") || '<p class="cc-muted">No announcements yet.</p>'}</div>`;
+    return;
+  }
+
+  if (page === "banners") {
+    const rows = await ccQuery("hero_slides");
+    el.innerHTML = `<div class="cc-card"><div class="cc-top"><h3>Hero Banners (${rows.length})</h3><button class="cc-btn" onclick="ccSlideForm()">+ Add Slide</button></div>${rows.map(r => `<div class="cc-card" style="margin:10px 0"><b>${esc(r.title || "Slide")}</b><p class="cc-muted">${esc(r.kicker || "")} · ${r.duration_seconds || 6}s · ${r.active ? "Active" : "Hidden"}</p><img src="${esc(r.image_url)}" style="height:90px;width:180px;border-radius:7px;margin:8px 0;object-fit:cover"><br><button class="cc-btn alt" onclick="ccSlideForm('${r.id}')">Edit</button> <button class="cc-btn danger" onclick="ccDelete('hero_slides','${r.id}','banners')">Delete</button></div>`).join("") || '<p class="cc-muted">No slides yet.</p>'}</div>`;
+    return;
+  }
+
+  if (page === "traffic") {
+    const rows = await ccQuery("page_visits");
+    const now = Date.now();
+    const active = rows.filter(r => now - new Date(r.created_at || 0).getTime() < 300000);
+    el.innerHTML = `<div class="cc-grid">${ccStat("Total Visits", rows.length)}${ccStat("Active (last 5 min)", active.length)}</div><div class="cc-card"><h3>Recent Visits</h3><div class="cc-table-wrap"><table class="cc-table"><tr><th>Visitor</th><th>Page</th><th>Visited At</th></tr>${rows.slice(-100).reverse().map(r => `<tr><td>${esc(r.visitor_id || "—")}</td><td>${esc(r.page_path || "")}</td><td>${r.created_at ? new Date(r.created_at).toLocaleString() : ""}</td></tr>`).join("") || '<tr><td colspan="3" class="cc-muted">No visits yet.</td></tr>'}</table></div></div>`;
+    return;
+  }
+
+  if (page === "reports") {
+    const [orders, expenses] = await Promise.all([ccQuery("orders"), ccQuery("expenses")]);
+    const byCur = {};
+    orders.filter(o => !["Cancelled", "Returned"].includes(o.status)).forEach(o => {
+      const c = o.currency || "PKR";
+      byCur[c] = (byCur[c] || 0) + Number(o.total || 0);
+    });
+    const exTotal = expenses.reduce((a, x) => a + Number(x.amount || 0), 0);
+    el.innerHTML = `<div class="cc-grid">${ccStat("Total Orders", orders.length)}${ccStat("Expenses Records", expenses.length)}${ccStat("Expenses Total", "Rs. " + money(exTotal))}${ccStat("Currencies", Object.keys(byCur).length)}</div><div class="cc-card"><h3>Revenue by Currency</h3>${Object.entries(byCur).map(([c, n]) => `<p><b>${c}:</b> ${money(n)}</p>`).join("") || "<p class='cc-muted'>No revenue yet</p>"}<button class="cc-btn alt" style="margin-top:10px" onclick="window.print()">Print Report</button></div>`;
+    return;
+  }
+
+  if (page === "expenses") {
+    const rows = await ccQuery("expenses");
+    el.innerHTML = `<div class="cc-card"><div class="cc-top"><h3>Business Expenses (${rows.length})</h3><button class="cc-btn" onclick="ccExpenseForm()">+ Add Expense</button></div><div class="cc-table-wrap"><table class="cc-table"><tr><th>Title</th><th>Category</th><th>Amount</th><th>Date</th><th>Actions</th></tr>${rows.map(r => `<tr><td>${esc(r.title)}</td><td>${esc(r.category)}</td><td>${esc(r.currency || "PKR")} ${money(r.amount)}</td><td>${esc(r.expense_date || "")}</td><td><button class="cc-btn danger" onclick="ccDelete('expenses','${r.id}','expenses')">Delete</button></td></tr>`).join("") || '<tr><td colspan="5" class="cc-muted">No expenses yet.</td></tr>'}</table></div></div>`;
+    return;
+  }
+
+  if (page === "admins") {
+    const rows = await ccQuery("profiles");
+    const admins = rows.filter(x => ["admin", "super_admin"].includes(x.role));
+    el.innerHTML = `<div class="cc-card"><h3>Admin Access Management (${admins.length})</h3><p class="cc-muted">Role changes must be performed via SQL (Supabase Dashboard).</p><div class="cc-table-wrap"><table class="cc-table"><tr><th>Name</th><th>Role</th><th>User ID</th></tr>${admins.map(x => `<tr><td>${esc(x.full_name || "—")}</td><td><span class="cc-pill">${esc(x.role)}</span></td><td style="font-size:11px;color:#999">${esc(x.id)}</td></tr>`).join("")}</table></div></div>`;
+    return;
+  }
+
+  if (page === "central") {
+    const s = data.settings || {};
+    el.innerHTML = `<div class="cc-card"><h3>Central Brain — Global Website Controls</h3><form class="cc-form" onsubmit="ccSaveCentral(event)"><div class="cc-field"><label>Website name</label><input id="ccBrandName" value="${esc(s.brand_name || "CozyCarry")}"></div><div class="cc-field"><label>Brand icon (text)</label><input id="ccBrandIcon" value="${esc(s.brand_icon || "C")}"></div><div class="cc-field"><label>Primary color</label><input id="ccPrimary" type="color" value="${esc(s.primary_color || "#0f3d2e")}"></div><div class="cc-field"><label>Accent color</label><input id="ccAccent" type="color" value="${esc(s.accent_color || "#c96a2e")}"></div><div class="cc-field full"><label>Announcement text</label><input id="ccAnnounce" value="${esc(s.announcement || "")}"></div><div class="cc-field"><label>WhatsApp number</label><input id="ccWa" value="${esc(s.whatsapp || "")}"></div><div class="cc-field"><label>Currency symbol</label><input id="ccCurr" value="${esc(s.currency || "Rs.")}"></div><div class="cc-field full"><label>Logo URL</label><input id="ccLogo" value="${esc(s.logo_url || "")}"></div><div class="cc-field full"><button class="cc-btn">Save Settings</button></div></form></div>`;
+    return;
+  }
 }
 
-// ---------- IMAGE UPLOAD ----------
 async function uploadFile(file) {
   if (!file) return null;
   const safe = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
@@ -1025,7 +956,6 @@ async function ccImageFile(file) {
   return await uploadFile(out);
 }
 
-// ---------- DELETE ----------
 async function ccDelete(table, id, page) {
   if (!confirm("Delete this record?")) return;
   const { error } = await db.from(table).delete().eq("id", id);
@@ -1034,7 +964,6 @@ async function ccDelete(table, id, page) {
   ccAdminPage(page);
 }
 
-// ---------- ORDER STATUS ----------
 async function ccSetOrderStatus(id, status) {
   const { error } = await db.from("orders").update({ status }).eq("id", id);
   if (error) return toast(error.message);
@@ -1042,7 +971,6 @@ async function ccSetOrderStatus(id, status) {
   ccAdminPage("orders");
 }
 
-// ---------- REVIEW STATUS ----------
 async function ccReviewStatus(id, status) {
   const { error } = await db.from("product_reviews").update({ status }).eq("id", id);
   if (error) return toast(error.message);
@@ -1050,41 +978,13 @@ async function ccReviewStatus(id, status) {
   ccAdminPage("reviews");
 }
 
-// ---------- PRODUCT FORM ----------
 async function ccProductForm(id = null) {
   const rows = await ccQuery("products"), p = rows.find(x => String(x.id) === String(id));
   const cats = await ccQuery("categories");
   ccSelectedImages = p?.images || [];
   const catOptions = cats.map(c => `<option value="${esc(c.name)}" ${p?.category === c.name ? "selected" : ""}>${esc(c.name)}</option>`).join("");
   const subOptions = (cats.find(c => c.name === p?.category)?.subcategories || []).map(s => `<option ${p?.subcategory === s ? "selected" : ""}>${esc(s)}</option>`).join("");
-  $("ccAdminContent").innerHTML = `
-    <div class="cc-card">
-      <div class="cc-top">
-        <h3>${p ? "Edit" : "Add"} Product</h3>
-        <button class="cc-btn alt" onclick="ccAdminPage('products')">← Back</button>
-      </div>
-      <form class="cc-form" onsubmit="ccSaveProduct(event,'${id || ""}')">
-        <div class="cc-field full"><label>Product name</label><input id="ccpName" required value="${esc(p?.name || "")}"></div>
-        <div class="cc-field"><label>Price</label><input id="ccpPrice" type="number" min="0" step="0.01" required value="${p?.price ?? ""}"></div>
-        <div class="cc-field"><label>Old price</label><input id="ccpOld" type="number" min="0" step="0.01" value="${p?.old_price ?? ""}"></div>
-        <div class="cc-field"><label>Cost price</label><input id="ccpCost" type="number" min="0" step="0.01" value="${p?.cost_price ?? ""}"></div>
-        <div class="cc-field"><label>Currency</label><select id="ccpCurrency"><option>PKR</option><option ${p?.currency === "USD" ? "selected" : ""}>USD</option></select></div>
-        <div class="cc-field"><label>Category</label><select id="ccpCategory" required onchange="ccProductSubOptions()"><option value="">Select category</option>${catOptions}</select></div>
-        <div class="cc-field"><label>Subcategory</label><select id="ccpSubcategory"><option value="">Select subcategory</option>${subOptions}</select></div>
-        <div class="cc-field"><label>Tag</label><select id="ccpTag">${["","New","Bestseller","Sale","Limited"].map(x => `<option ${x === (p?.tag || "") ? "selected" : ""}>${x}</option>`).join("")}</select></div>
-        <div class="cc-field"><label>Rating</label><input id="ccpRating" type="number" min="0" max="5" step="0.1" value="${p?.rating ?? 4.8}"></div>
-        <div class="cc-field"><label>Stock quantity</label><input id="ccpStock" type="number" min="0" value="${p?.stock_quantity ?? (p?.in_stock ? 1 : 0)}"></div>
-        <div class="cc-field"><label>Sold quantity</label><input id="ccpSold" type="number" min="0" value="${p?.sold_quantity ?? 0}"></div>
-        <div class="cc-field full"><label>Description</label><textarea id="ccpDesc" rows="4">${esc(p?.description || "")}</textarea></div>
-        <div class="cc-field full"><label>Buy Now URL (optional)</label><input id="ccpBuy" type="url" value="${esc(p?.buy_url || "")}"></div>
-        <div class="cc-field full"><label>Image URL (one per line)</label><textarea id="ccpUrls" rows="3">${esc((p?.images || []).join("\n"))}</textarea></div>
-        <div class="cc-field full"><label>Upload images (max 1080×1080)</label><input id="ccpFiles" type="file" accept="image/*" multiple></div>
-        <div class="cc-field"><label>Cover index</label><select id="ccpCover">${(p?.images || []).map((u, i) => `<option value="${i}" ${u === p?.cover_image ? "selected" : ""}>Image ${i + 1}</option>`).join("")}</select></div>
-        <div class="cc-field"><label>Visibility</label><div class="cc-checks"><label><input id="ccpFeatured" type="checkbox" ${p?.featured ? "checked" : ""}> Featured ★</label><label><input id="ccpActive" type="checkbox" ${p?.is_active !== false ? "checked" : ""}> Active</label><label><input id="ccpStockOn" type="checkbox" ${p?.in_stock !== false ? "checked" : ""}> In stock</label></div></div>
-        <div class="cc-field full"><button class="cc-btn">Save Product</button></div>
-      </form>
-    </div>
-  `;
+  $("ccAdminContent").innerHTML = `<div class="cc-card"><div class="cc-top"><h3>${p ? "Edit" : "Add"} Product</h3><button class="cc-btn alt" onclick="ccAdminPage('products')">← Back</button></div><form class="cc-form" onsubmit="ccSaveProduct(event,'${id || ""}')"><div class="cc-field full"><label>Product name</label><input id="ccpName" required value="${esc(p?.name || "")}"></div><div class="cc-field"><label>Price</label><input id="ccpPrice" type="number" min="0" step="0.01" required value="${p?.price ?? ""}"></div><div class="cc-field"><label>Old price</label><input id="ccpOld" type="number" min="0" step="0.01" value="${p?.old_price ?? ""}"></div><div class="cc-field"><label>Cost price</label><input id="ccpCost" type="number" min="0" step="0.01" value="${p?.cost_price ?? ""}"></div><div class="cc-field"><label>Currency</label><select id="ccpCurrency"><option>PKR</option><option ${p?.currency === "USD" ? "selected" : ""}>USD</option></select></div><div class="cc-field"><label>Category</label><select id="ccpCategory" required onchange="ccProductSubOptions()"><option value="">Select category</option>${catOptions}</select></div><div class="cc-field"><label>Subcategory</label><select id="ccpSubcategory"><option value="">Select subcategory</option>${subOptions}</select></div><div class="cc-field"><label>Tag</label><select id="ccpTag">${["","New","Bestseller","Sale","Limited"].map(x => `<option ${x === (p?.tag || "") ? "selected" : ""}>${x}</option>`).join("")}</select></div><div class="cc-field"><label>Rating</label><input id="ccpRating" type="number" min="0" max="5" step="0.1" value="${p?.rating ?? 4.8}"></div><div class="cc-field"><label>Stock quantity</label><input id="ccpStock" type="number" min="0" value="${p?.stock_quantity ?? (p?.in_stock ? 1 : 0)}"></div><div class="cc-field"><label>Sold quantity</label><input id="ccpSold" type="number" min="0" value="${p?.sold_quantity ?? 0}"></div><div class="cc-field full"><label>Description</label><textarea id="ccpDesc" rows="4">${esc(p?.description || "")}</textarea></div><div class="cc-field full"><label>Buy Now URL (optional)</label><input id="ccpBuy" type="url" value="${esc(p?.buy_url || "")}"></div><div class="cc-field full"><label>Image URL (one per line)</label><textarea id="ccpUrls" rows="3">${esc((p?.images || []).join("\n"))}</textarea></div><div class="cc-field full"><label>Upload images (max 1080×1080)</label><input id="ccpFiles" type="file" accept="image/*" multiple></div><div class="cc-field"><label>Cover index</label><select id="ccpCover">${(p?.images || []).map((u, i) => `<option value="${i}" ${u === p?.cover_image ? "selected" : ""}>Image ${i + 1}</option>`).join("")}</select></div><div class="cc-field"><label>Visibility</label><div class="cc-checks"><label><input id="ccpFeatured" type="checkbox" ${p?.featured ? "checked" : ""}> Featured ★</label><label><input id="ccpActive" type="checkbox" ${p?.is_active !== false ? "checked" : ""}> Active</label><label><input id="ccpStockOn" type="checkbox" ${p?.in_stock !== false ? "checked" : ""}> In stock</label></div></div><div class="cc-field full"><button class="cc-btn">Save Product</button></div></form></div>`;
 }
 
 async function ccProductSubOptions() {
@@ -1107,24 +1007,7 @@ async function ccSaveProduct(e, id) {
     if (!images.length) throw Error("Add at least one product image URL or upload");
     const cat = $("ccpCategory").value;
     const payload = {
-      name: $("ccpName").value.trim(),
-      price: Number($("ccpPrice").value),
-      old_price: Number($("ccpOld").value) || 0,
-      cost_price: Number($("ccpCost").value) || 0,
-      currency: $("ccpCurrency").value,
-      category: cat,
-      subcategory: $("ccpSubcategory").value,
-      tag: $("ccpTag").value,
-      rating: Number($("ccpRating").value) || 0,
-      stock_quantity: Number($("ccpStock").value) || 0,
-      sold_quantity: Number($("ccpSold").value) || 0,
-      description: $("ccpDesc").value,
-      buy_url: $("ccpBuy").value,
-      featured: $("ccpFeatured").checked,
-      is_active: $("ccpActive").checked,
-      in_stock: $("ccpStockOn").checked && Number($("ccpStock").value) > 0,
-      images,
-      cover_image: images[Math.min(Number($("ccpCover").value) || 0, images.length - 1)] || images[0]
+      name: $("ccpName").value.trim(), price: Number($("ccpPrice").value), old_price: Number($("ccpOld").value) || 0, cost_price: Number($("ccpCost").value) || 0, currency: $("ccpCurrency").value, category: cat, subcategory: $("ccpSubcategory").value, tag: $("ccpTag").value, rating: Number($("ccpRating").value) || 0, stock_quantity: Number($("ccpStock").value) || 0, sold_quantity: Number($("ccpSold").value) || 0, description: $("ccpDesc").value, buy_url: $("ccpBuy").value, featured: $("ccpFeatured").checked, is_active: $("ccpActive").checked, in_stock: $("ccpStockOn").checked && Number($("ccpStock").value) > 0, images, cover_image: images[Math.min(Number($("ccpCover").value) || 0, images.length - 1)] || images[0]
     };
     const q = id ? db.from("products").update(payload).eq("id", id) : db.from("products").insert(payload);
     const { error } = await q;
@@ -1132,29 +1015,13 @@ async function ccSaveProduct(e, id) {
     await loadAll();
     toast("Product saved");
     ccAdminPage("products");
-  } catch (x) {
-    toast(x.message);
-  }
+  } catch (x) { toast(x.message); }
 }
 
-// ---------- CATEGORY FORM ----------
 async function ccCategoryForm(id = null) {
   const rows = await ccQuery("categories");
   const c = rows.find(x => String(x.id) === String(id));
-  $("ccAdminContent").innerHTML = `
-    <div class="cc-card">
-      <h3>${c ? "Edit" : "Add"} Main Category</h3>
-      <form class="cc-form" onsubmit="ccSaveCategory(event,'${id || ""}')">
-        <div class="cc-field"><label>Category name</label><input id="cccName" required value="${esc(c?.name || "")}"></div>
-        <div class="cc-field"><label>Sort order</label><input id="cccSort" type="number" value="${c?.sort_order || 0}"></div>
-        <div class="cc-field full"><label>Image URL</label><input id="cccUrl" value="${esc(c?.image_url || "")}"></div>
-        <div class="cc-field full"><label>Upload image</label><input id="cccFile" type="file" accept="image/*"></div>
-        <div class="cc-field full"><label>Subcategories (one per line)</label><textarea id="cccSubs" rows="4">${esc((c?.subcategories || []).join("\n"))}</textarea></div>
-        <div class="cc-field"><label><input id="cccActive" type="checkbox" ${c?.is_active !== false ? "checked" : ""}> Active</label></div>
-        <div class="cc-field full"><button class="cc-btn">Save Category</button></div>
-      </form>
-    </div>
-  `;
+  $("ccAdminContent").innerHTML = `<div class="cc-card"><h3>${c ? "Edit" : "Add"} Main Category</h3><form class="cc-form" onsubmit="ccSaveCategory(event,'${id || ""}')"><div class="cc-field"><label>Category name</label><input id="cccName" required value="${esc(c?.name || "")}"></div><div class="cc-field"><label>Sort order</label><input id="cccSort" type="number" value="${c?.sort_order || 0}"></div><div class="cc-field full"><label>Image URL</label><input id="cccUrl" value="${esc(c?.image_url || "")}"></div><div class="cc-field full"><label>Upload image</label><input id="cccFile" type="file" accept="image/*"></div><div class="cc-field full"><label>Subcategories (one per line)</label><textarea id="cccSubs" rows="4">${esc((c?.subcategories || []).join("\n"))}</textarea></div><div class="cc-field"><label><input id="cccActive" type="checkbox" ${c?.is_active !== false ? "checked" : ""}> Active</label></div><div class="cc-field full"><button class="cc-btn">Save Category</button></div></form></div>`;
 }
 
 async function ccSaveCategory(e, id) {
@@ -1163,303 +1030,25 @@ async function ccSaveCategory(e, id) {
     let url = $("cccUrl").value;
     const f = $("cccFile").files[0];
     if (f) url = await ccImageFile(f);
-    const payload = {
-      name: $("cccName").value.trim(),
-      image_url: url,
-      subcategories: $("cccSubs").value.split("\n").map(x => x.trim()).filter(Boolean),
-      sort_order: Number($("cccSort").value) || 0,
-      is_active: $("cccActive").checked
-    };
+    const payload = { name: $("cccName").value.trim(), image_url: url, subcategories: $("cccSubs").value.split("\n").map(x => x.trim()).filter(Boolean), sort_order: Number($("cccSort").value) || 0, is_active: $("cccActive").checked };
     const q = id ? db.from("categories").update(payload).eq("id", id) : db.from("categories").insert(payload);
     const { error } = await q;
     if (error) throw error;
     await loadAll();
     toast("Category saved");
     ccAdminPage("categories");
-  } catch (x) {
-    toast(x.message);
-  }
+  } catch (x) { toast(x.message); }
 }
-/* ============================================================
-   PART 3 — ADMIN PANEL EXTRA PAGES
-   Affiliate, Sales, Announcements, Banners, Traffic, Reports, Expenses, Admins, Central
-   ============================================================ */
 
-// Note: ye functions ccRenderAdmin ke andar call hote hain agar page match kare.
-// Lekin humne Part 2 mein ccRenderAdmin likh diya hai jo last mein fallback deta hai.
-// Isliye abhi hum ccRenderAdmin ko override kar rahe hain taake baaki pages bhi kaam karein.
-
-const _ccRenderAdminPart2 = ccRenderAdmin;
-
-ccRenderAdmin = async function(page) {
-  const el = $("ccAdminContent");
-  el.innerHTML = '<p class="cc-muted">Loading…</p>';
-
-  // ---------- AFFILIATE PRODUCTS ----------
-  if (page === "affiliate") {
-    const rows = await ccQuery("affiliate_products");
-    el.innerHTML = `
-      <div class="cc-card">
-        <div class="cc-top">
-          <h3>Affiliate Products (${rows.length})</h3>
-          <button class="cc-btn" onclick="ccAffiliateForm()">+ Add Affiliate Product</button>
-        </div>
-        <div class="cc-table-wrap">
-          <table class="cc-table">
-            <tr><th>Image</th><th>Name</th><th>Price</th><th>Clicks</th><th>Actions</th></tr>
-            ${rows.map(r => `
-              <tr>
-                <td><img class="cc-thumb" src="${esc(r.image_url || "")}"></td>
-                <td>${esc(r.name)}</td>
-                <td>${esc(r.currency || "PKR")} ${money(r.price)}</td>
-                <td>${r.clicks || 0}</td>
-                <td>
-                  <button class="cc-btn alt" onclick="ccAffiliateForm('${r.id}')">Edit</button>
-                  <button class="cc-btn danger" onclick="ccDelete('affiliate_products','${r.id}','affiliate')">Delete</button>
-                </td>
-              </tr>
-            `).join("") || '<tr><td colspan="5" class="cc-muted">No affiliate products yet.</td></tr>'}
-          </table>
-        </div>
-      </div>
-    `;
-    return;
-  }
-
-  // ---------- SALES & CAMPAIGNS ----------
-  if (page === "sales") {
-    const rows = await ccQuery("sale_campaigns");
-    el.innerHTML = `
-      <div class="cc-card">
-        <div class="cc-top">
-          <h3>Sale Campaigns (${rows.length})</h3>
-          <button class="cc-btn" onclick="ccSaleForm()">+ Create Campaign</button>
-        </div>
-        ${rows.map(r => `
-          <div class="cc-card" style="margin:10px 0">
-            <b>${esc(r.title)}</b>
-            <p class="cc-muted">${esc(r.discount_percent)}% off · ${r.starts_at ? new Date(r.starts_at).toLocaleDateString() : ""} — ${r.ends_at ? new Date(r.ends_at).toLocaleDateString() : ""}</p>
-            <span class="cc-pill">${r.is_active ? "Active" : "Inactive"}</span>
-            <button class="cc-btn alt" onclick="ccSaleForm('${r.id}')">Edit</button>
-            <button class="cc-btn danger" onclick="ccDelete('sale_campaigns','${r.id}','sales')">Delete</button>
-          </div>
-        `).join("") || '<p class="cc-muted">No campaigns yet.</p>'}
-      </div>
-    `;
-    return;
-  }
-
-  // ---------- ANNOUNCEMENTS ----------
-  if (page === "announcements") {
-    const rows = await ccQuery("announcements");
-    el.innerHTML = `
-      <div class="cc-card">
-        <div class="cc-top">
-          <h3>Announcement Bar (${rows.length})</h3>
-          <button class="cc-btn" onclick="ccAnnouncementForm()">+ Add Announcement</button>
-        </div>
-        ${rows.map(r => `
-          <div class="cc-card" style="margin:10px 0">
-            <b>${esc(r.message)}</b>
-            <p class="cc-muted">Active: ${r.is_active ? "Yes" : "No"}</p>
-            <button class="cc-btn alt" onclick="ccAnnouncementForm('${r.id}')">Edit</button>
-            <button class="cc-btn danger" onclick="ccDelete('announcements','${r.id}','announcements')">Delete</button>
-          </div>
-        `).join("") || '<p class="cc-muted">No announcements yet.</p>'}
-      </div>
-    `;
-    return;
-  }
-
-  // ---------- HERO BANNERS ----------
-  if (page === "banners") {
-    const rows = await ccQuery("hero_slides");
-    el.innerHTML = `
-      <div class="cc-card">
-        <div class="cc-top">
-          <h3>Hero Banners (${rows.length})</h3>
-          <button class="cc-btn" onclick="ccSlideForm()">+ Add Slide</button>
-        </div>
-        ${rows.map(r => `
-          <div class="cc-card" style="margin:10px 0">
-            <b>${esc(r.title || "Slide")}</b>
-            <p class="cc-muted">${esc(r.kicker || "")} · ${r.duration_seconds || 6}s · ${r.active ? "Active" : "Hidden"}</p>
-            <img src="${esc(r.image_url)}" style="height:90px;width:180px;border-radius:7px;margin:8px 0;object-fit:cover">
-            <br>
-            <button class="cc-btn alt" onclick="ccSlideForm('${r.id}')">Edit</button>
-            <button class="cc-btn danger" onclick="ccDelete('hero_slides','${r.id}','banners')">Delete</button>
-          </div>
-        `).join("") || '<p class="cc-muted">No slides yet.</p>'}
-      </div>
-    `;
-    return;
-  }
-
-  // ---------- TRAFFIC ----------
-  if (page === "traffic") {
-    const rows = await ccQuery("page_visits");
-    const now = Date.now();
-    const active = rows.filter(r => now - new Date(r.created_at || 0).getTime() < 300000);
-    el.innerHTML = `
-      <div class="cc-grid">
-        ${ccStat("Total Visits", rows.length)}
-        ${ccStat("Active (last 5 min)", active.length)}
-      </div>
-      <div class="cc-card">
-        <h3>Recent Visits</h3>
-        <div class="cc-table-wrap">
-          <table class="cc-table">
-            <tr><th>Visitor</th><th>Page</th><th>Visited At</th></tr>
-            ${rows.slice(-100).reverse().map(r => `
-              <tr>
-                <td>${esc(r.visitor_id || "—")}</td>
-                <td>${esc(r.page_path || "")}</td>
-                <td>${r.created_at ? new Date(r.created_at).toLocaleString() : ""}</td>
-              </tr>
-            `).join("") || '<tr><td colspan="3" class="cc-muted">No visits yet.</td></tr>'}
-          </table>
-        </div>
-      </div>
-    `;
-    return;
-  }
-
-  // ---------- REPORTS ----------
-  if (page === "reports") {
-    const [orders, expenses] = await Promise.all([ccQuery("orders"), ccQuery("expenses")]);
-    const byCur = {};
-    orders.filter(o => !["Cancelled", "Returned"].includes(o.status)).forEach(o => {
-      const c = o.currency || "PKR";
-      byCur[c] = (byCur[c] || 0) + Number(o.total || 0);
-    });
-    const exTotal = expenses.reduce((a, x) => a + Number(x.amount || 0), 0);
-    el.innerHTML = `
-      <div class="cc-grid">
-        ${ccStat("Total Orders", orders.length)}
-        ${ccStat("Expenses Records", expenses.length)}
-        ${ccStat("Expenses Total", "Rs. " + money(exTotal))}
-        ${ccStat("Currencies", Object.keys(byCur).length)}
-      </div>
-      <div class="cc-card">
-        <h3>Revenue by Currency</h3>
-        ${Object.entries(byCur).map(([c, n]) => `<p><b>${c}:</b> ${money(n)}</p>`).join("") || "<p class='cc-muted'>No revenue yet</p>"}
-        <button class="cc-btn alt" style="margin-top:10px" onclick="window.print()">Print Report</button>
-      </div>
-    `;
-    return;
-  }
-
-  // ---------- EXPENSES ----------
-  if (page === "expenses") {
-    const rows = await ccQuery("expenses");
-    el.innerHTML = `
-      <div class="cc-card">
-        <div class="cc-top">
-          <h3>Business Expenses (${rows.length})</h3>
-          <button class="cc-btn" onclick="ccExpenseForm()">+ Add Expense</button>
-        </div>
-        <div class="cc-table-wrap">
-          <table class="cc-table">
-            <tr><th>Title</th><th>Category</th><th>Amount</th><th>Date</th><th>Actions</th></tr>
-            ${rows.map(r => `
-              <tr>
-                <td>${esc(r.title)}</td>
-                <td>${esc(r.category)}</td>
-                <td>${esc(r.currency || "PKR")} ${money(r.amount)}</td>
-                <td>${esc(r.expense_date || "")}</td>
-                <td><button class="cc-btn danger" onclick="ccDelete('expenses','${r.id}','expenses')">Delete</button></td>
-              </tr>
-            `).join("") || '<tr><td colspan="5" class="cc-muted">No expenses yet.</td></tr>'}
-          </table>
-        </div>
-      </div>
-    `;
-    return;
-  }
-
-  // ---------- ADMINS ----------
-  if (page === "admins") {
-    const rows = await ccQuery("profiles");
-    const admins = rows.filter(x => ["admin", "super_admin"].includes(x.role));
-    el.innerHTML = `
-      <div class="cc-card">
-        <h3>Admin Access Management (${admins.length})</h3>
-        <p class="cc-muted">Role changes must be performed via SQL (Supabase Dashboard).</p>
-        <div class="cc-table-wrap">
-          <table class="cc-table">
-            <tr><th>Name</th><th>Role</th><th>User ID</th></tr>
-            ${admins.map(x => `
-              <tr>
-                <td>${esc(x.full_name || "—")}</td>
-                <td><span class="cc-pill">${esc(x.role)}</span></td>
-                <td style="font-size:11px;color:#999">${esc(x.id)}</td>
-              </tr>
-            `).join("")}
-          </table>
-        </div>
-      </div>
-    `;
-    return;
-  }
-
-  // ---------- CENTRAL BRAIN ----------
-  if (page === "central") {
-    const s = data.settings || {};
-    el.innerHTML = `
-      <div class="cc-card">
-        <h3>Central Brain — Global Website Controls</h3>
-        <form class="cc-form" onsubmit="ccSaveCentral(event)">
-          <div class="cc-field"><label>Website name</label><input id="ccBrandName" value="${esc(s.brand_name || "CozyCarry")}"></div>
-          <div class="cc-field"><label>Brand icon (text)</label><input id="ccBrandIcon" value="${esc(s.brand_icon || "C")}"></div>
-          <div class="cc-field"><label>Primary color</label><input id="ccPrimary" type="color" value="${esc(s.primary_color || "#0f3d2e")}"></div>
-          <div class="cc-field"><label>Accent color</label><input id="ccAccent" type="color" value="${esc(s.accent_color || "#c96a2e")}"></div>
-          <div class="cc-field full"><label>Announcement text</label><input id="ccAnnounce" value="${esc(s.announcement || "")}"></div>
-          <div class="cc-field"><label>WhatsApp number</label><input id="ccWa" value="${esc(s.whatsapp || "")}"></div>
-          <div class="cc-field"><label>Currency symbol</label><input id="ccCurr" value="${esc(s.currency || "Rs.")}"></div>
-          <div class="cc-field full"><label>Logo URL</label><input id="ccLogo" value="${esc(s.logo_url || "")}"></div>
-          <div class="cc-field full"><button class="cc-btn">Save Settings</button></div>
-        </form>
-      </div>
-    `;
-    return;
-  }
-
-  // Agar koi aur page hai to Part 2 wala function call karo
-  return _ccRenderAdminPart2(page);
-};
-
-// ---------- AFFILIATE FORM ----------
 async function ccAffiliateForm(id = null) {
   const rows = await ccQuery("affiliate_products");
   const p = rows.find(x => String(x.id) === String(id));
-  $("ccAdminContent").innerHTML = `
-    <div class="cc-card">
-      <h3>${p ? "Edit" : "Add"} Affiliate Product</h3>
-      <form class="cc-form" onsubmit="ccSaveAffiliate(event,'${id || ""}')">
-        <div class="cc-field"><label>Name</label><input id="ccaName" required value="${esc(p?.name || "")}"></div>
-        <div class="cc-field"><label>Currency</label><select id="ccaCurrency"><option ${p?.currency === "PKR" ? "selected" : ""}>PKR</option><option ${p?.currency === "USD" ? "selected" : ""}>USD</option></select></div>
-        <div class="cc-field"><label>Price</label><input id="ccaPrice" type="number" step=".01" required value="${p?.price || ""}"></div>
-        <div class="cc-field"><label>Compare price</label><input id="ccaOld" type="number" step=".01" value="${p?.compare_price || ""}"></div>
-        <div class="cc-field full"><label>Image URL</label><input id="ccaImage" value="${esc(p?.image_url || "")}"></div>
-        <div class="cc-field full"><label>Affiliate URL</label><input id="ccaUrl" type="url" required value="${esc(p?.affiliate_url || "")}"></div>
-        <div class="cc-field full"><label>Description</label><textarea id="ccaDesc">${esc(p?.description || "")}</textarea></div>
-        <div class="cc-field full"><button class="cc-btn">Save Affiliate Product</button></div>
-      </form>
-    </div>
-  `;
+  $("ccAdminContent").innerHTML = `<div class="cc-card"><h3>${p ? "Edit" : "Add"} Affiliate Product</h3><form class="cc-form" onsubmit="ccSaveAffiliate(event,'${id || ""}')"><div class="cc-field"><label>Name</label><input id="ccaName" required value="${esc(p?.name || "")}"></div><div class="cc-field"><label>Currency</label><select id="ccaCurrency"><option ${p?.currency === "PKR" ? "selected" : ""}>PKR</option><option ${p?.currency === "USD" ? "selected" : ""}>USD</option></select></div><div class="cc-field"><label>Price</label><input id="ccaPrice" type="number" step=".01" required value="${p?.price || ""}"></div><div class="cc-field"><label>Compare price</label><input id="ccaOld" type="number" step=".01" value="${p?.compare_price || ""}"></div><div class="cc-field full"><label>Image URL</label><input id="ccaImage" value="${esc(p?.image_url || "")}"></div><div class="cc-field full"><label>Affiliate URL</label><input id="ccaUrl" type="url" required value="${esc(p?.affiliate_url || "")}"></div><div class="cc-field full"><label>Description</label><textarea id="ccaDesc">${esc(p?.description || "")}</textarea></div><div class="cc-field full"><button class="cc-btn">Save Affiliate Product</button></div></form></div>`;
 }
 
 async function ccSaveAffiliate(e, id) {
   e.preventDefault();
-  const payload = {
-    name: $("ccaName").value,
-    currency: $("ccaCurrency").value,
-    price: Number($("ccaPrice").value),
-    compare_price: Number($("ccaOld").value) || 0,
-    image_url: $("ccaImage").value,
-    affiliate_url: $("ccaUrl").value,
-    description: $("ccaDesc").value
-  };
+  const payload = { name: $("ccaName").value, currency: $("ccaCurrency").value, price: Number($("ccaPrice").value), compare_price: Number($("ccaOld").value) || 0, image_url: $("ccaImage").value, affiliate_url: $("ccaUrl").value, description: $("ccaDesc").value };
   const q = id ? db.from("affiliate_products").update(payload).eq("id", id) : db.from("affiliate_products").insert(payload);
   const { error } = await q;
   if (error) return toast(error.message);
@@ -1467,38 +1056,15 @@ async function ccSaveAffiliate(e, id) {
   ccAdminPage("affiliate");
 }
 
-// ---------- SALE CAMPAIGN FORM ----------
 async function ccSaleForm(id = null) {
   const rows = await ccQuery("sale_campaigns");
   const p = rows.find(x => String(x.id) === String(id));
-  $("ccAdminContent").innerHTML = `
-    <div class="cc-card">
-      <h3>${p ? "Edit" : "Create"} Sale Campaign</h3>
-      <form class="cc-form" onsubmit="ccSaveSale(event,'${id || ""}')">
-        <div class="cc-field"><label>Campaign title</label><input id="ccSaleTitle" required value="${esc(p?.title || "")}"></div>
-        <div class="cc-field"><label>Discount %</label><input id="ccSaleDiscount" type="number" min="1" max="100" value="${p?.discount_percent || ""}"></div>
-        <div class="cc-field"><label>Start date/time</label><input id="ccSaleStart" type="datetime-local" value="${p?.starts_at?.slice(0,16) || ""}"></div>
-        <div class="cc-field"><label>End date/time</label><input id="ccSaleEnd" type="datetime-local" value="${p?.ends_at?.slice(0,16) || ""}"></div>
-        <div class="cc-field full"><label>Banner image URL</label><input id="ccSaleImage" value="${esc(p?.image_url || "")}"></div>
-        <div class="cc-field full"><label>Description</label><textarea id="ccSaleDesc">${esc(p?.description || "")}</textarea></div>
-        <div class="cc-field"><label><input type="checkbox" id="ccSaleActive" ${p?.is_active !== false ? "checked" : ""}> Active</label></div>
-        <div class="cc-field full"><button class="cc-btn">Save Campaign</button></div>
-      </form>
-    </div>
-  `;
+  $("ccAdminContent").innerHTML = `<div class="cc-card"><h3>${p ? "Edit" : "Create"} Sale Campaign</h3><form class="cc-form" onsubmit="ccSaveSale(event,'${id || ""}')"><div class="cc-field"><label>Campaign title</label><input id="ccSaleTitle" required value="${esc(p?.title || "")}"></div><div class="cc-field"><label>Discount %</label><input id="ccSaleDiscount" type="number" min="1" max="100" value="${p?.discount_percent || ""}"></div><div class="cc-field"><label>Start date/time</label><input id="ccSaleStart" type="datetime-local" value="${p?.starts_at?.slice(0,16) || ""}"></div><div class="cc-field"><label>End date/time</label><input id="ccSaleEnd" type="datetime-local" value="${p?.ends_at?.slice(0,16) || ""}"></div><div class="cc-field full"><label>Banner image URL</label><input id="ccSaleImage" value="${esc(p?.image_url || "")}"></div><div class="cc-field full"><label>Description</label><textarea id="ccSaleDesc">${esc(p?.description || "")}</textarea></div><div class="cc-field"><label><input type="checkbox" id="ccSaleActive" ${p?.is_active !== false ? "checked" : ""}> Active</label></div><div class="cc-field full"><button class="cc-btn">Save Campaign</button></div></form></div>`;
 }
 
 async function ccSaveSale(e, id) {
   e.preventDefault();
-  const payload = {
-    title: $("ccSaleTitle").value,
-    discount_percent: Number($("ccSaleDiscount").value),
-    starts_at: $("ccSaleStart").value || null,
-    ends_at: $("ccSaleEnd").value || null,
-    image_url: $("ccSaleImage").value,
-    description: $("ccSaleDesc").value,
-    is_active: $("ccSaleActive").checked
-  };
+  const payload = { title: $("ccSaleTitle").value, discount_percent: Number($("ccSaleDiscount").value), starts_at: $("ccSaleStart").value || null, ends_at: $("ccSaleEnd").value || null, image_url: $("ccSaleImage").value, description: $("ccSaleDesc").value, is_active: $("ccSaleActive").checked };
   const q = id ? db.from("sale_campaigns").update(payload).eq("id", id) : db.from("sale_campaigns").insert(payload);
   const { error } = await q;
   if (error) return toast(error.message);
@@ -1506,34 +1072,15 @@ async function ccSaveSale(e, id) {
   ccAdminPage("sales");
 }
 
-// ---------- ANNOUNCEMENT FORM ----------
 async function ccAnnouncementForm(id = null) {
   const rows = await ccQuery("announcements");
   const p = rows.find(x => String(x.id) === String(id));
-  $("ccAdminContent").innerHTML = `
-    <div class="cc-card">
-      <h3>${p ? "Edit" : "Add"} Announcement</h3>
-      <form class="cc-form" onsubmit="ccSaveAnnouncement(event,'${id || ""}')">
-        <div class="cc-field full"><label>Announcement text</label><input id="ccAnnMessage" required value="${esc(p?.message || "")}"></div>
-        <div class="cc-field"><label>Background</label><input id="ccAnnBg" type="color" value="${p?.background_color || "#0f3d2e"}"></div>
-        <div class="cc-field"><label>Text color</label><input id="ccAnnColor" type="color" value="${p?.text_color || "#ffffff"}"></div>
-        <div class="cc-field"><label>Link URL</label><input id="ccAnnLink" type="url" value="${esc(p?.link_url || "")}"></div>
-        <div class="cc-field"><label><input type="checkbox" id="ccAnnActive" ${p?.is_active !== false ? "checked" : ""}> Active</label></div>
-        <div class="cc-field full"><button class="cc-btn">Save Announcement</button></div>
-      </form>
-    </div>
-  `;
+  $("ccAdminContent").innerHTML = `<div class="cc-card"><h3>${p ? "Edit" : "Add"} Announcement</h3><form class="cc-form" onsubmit="ccSaveAnnouncement(event,'${id || ""}')"><div class="cc-field full"><label>Announcement text</label><input id="ccAnnMessage" required value="${esc(p?.message || "")}"></div><div class="cc-field"><label>Background</label><input id="ccAnnBg" type="color" value="${p?.background_color || "#0f3d2e"}"></div><div class="cc-field"><label>Text color</label><input id="ccAnnColor" type="color" value="${p?.text_color || "#ffffff"}"></div><div class="cc-field"><label>Link URL</label><input id="ccAnnLink" type="url" value="${esc(p?.link_url || "")}"></div><div class="cc-field"><label><input type="checkbox" id="ccAnnActive" ${p?.is_active !== false ? "checked" : ""}> Active</label></div><div class="cc-field full"><button class="cc-btn">Save Announcement</button></div></form></div>`;
 }
 
 async function ccSaveAnnouncement(e, id) {
   e.preventDefault();
-  const payload = {
-    message: $("ccAnnMessage").value,
-    background_color: $("ccAnnBg").value,
-    text_color: $("ccAnnColor").value,
-    link_url: $("ccAnnLink").value,
-    is_active: $("ccAnnActive").checked
-  };
+  const payload = { message: $("ccAnnMessage").value, background_color: $("ccAnnBg").value, text_color: $("ccAnnColor").value, link_url: $("ccAnnLink").value, is_active: $("ccAnnActive").checked };
   const q = id ? db.from("announcements").update(payload).eq("id", id) : db.from("announcements").insert(payload);
   const { error } = await q;
   if (error) return toast(error.message);
@@ -1542,28 +1089,10 @@ async function ccSaveAnnouncement(e, id) {
   ccAdminPage("announcements");
 }
 
-// ---------- SLIDE FORM ----------
 async function ccSlideForm(id = null) {
   const rows = await ccQuery("hero_slides");
   const s = rows.find(x => String(x.id) === String(id));
-  $("ccAdminContent").innerHTML = `
-    <div class="cc-card">
-      <h3>${s ? "Edit" : "Add"} Hero Slide</h3>
-      <form class="cc-form" onsubmit="ccSaveSlide(event,'${id || ""}')">
-        <div class="cc-field full"><label>Image URL</label><input id="si" value="${esc(s?.image_url || "")}"></div>
-        <div class="cc-field full"><label>Upload image</label><input id="sfile" type="file" accept="image/*"></div>
-        <div class="cc-field"><label>Kicker</label><input id="sk" value="${esc(s?.kicker || "")}"></div>
-        <div class="cc-field"><label>Main heading</label><input id="st" value="${esc(s?.title || "")}"></div>
-        <div class="cc-field full"><label>Description</label><textarea id="sd">${esc(s?.description || "")}</textarea></div>
-        <div class="cc-field"><label>Button text</label><input id="sb" value="${esc(s?.button_text || "Shop Now")}"></div>
-        <div class="cc-field"><label>Target category</label><select id="scat"><option>All</option>${data.categories.map(c => `<option ${s?.target_category === c.name ? "selected" : ""}>${esc(c.name)}</option>`).join("")}</select></div>
-        <div class="cc-field"><label>Order</label><input id="so" type="number" value="${s?.sort_order ?? data.slides.length}"></div>
-        <div class="cc-field"><label>Duration (seconds)</label><input id="sdur" type="number" min="3" max="30" value="${s?.duration_seconds || 6}"></div>
-        <div class="cc-field"><label><input type="checkbox" id="sactive" ${s?.active !== false ? "checked" : ""}> Active</label></div>
-        <div class="cc-field full"><button class="cc-btn">Save Slide</button></div>
-      </form>
-    </div>
-  `;
+  $("ccAdminContent").innerHTML = `<div class="cc-card"><h3>${s ? "Edit" : "Add"} Hero Slide</h3><form class="cc-form" onsubmit="ccSaveSlide(event,'${id || ""}')"><div class="cc-field full"><label>Image URL</label><input id="si" value="${esc(s?.image_url || "")}"></div><div class="cc-field full"><label>Upload image</label><input id="sfile" type="file" accept="image/*"></div><div class="cc-field"><label>Kicker</label><input id="sk" value="${esc(s?.kicker || "")}"></div><div class="cc-field"><label>Main heading</label><input id="st" value="${esc(s?.title || "")}"></div><div class="cc-field full"><label>Description</label><textarea id="sd">${esc(s?.description || "")}</textarea></div><div class="cc-field"><label>Button text</label><input id="sb" value="${esc(s?.button_text || "Shop Now")}"></div><div class="cc-field"><label>Target category</label><select id="scat"><option>All</option>${data.categories.map(c => `<option ${s?.target_category === c.name ? "selected" : ""}>${esc(c.name)}</option>`).join("")}</select></div><div class="cc-field"><label>Order</label><input id="so" type="number" value="${s?.sort_order ?? data.slides.length}"></div><div class="cc-field"><label>Duration (seconds)</label><input id="sdur" type="number" min="3" max="30" value="${s?.duration_seconds || 6}"></div><div class="cc-field"><label><input type="checkbox" id="sactive" ${s?.active !== false ? "checked" : ""}> Active</label></div><div class="cc-field full"><button class="cc-btn">Save Slide</button></div></form></div>`;
 }
 
 async function ccSaveSlide(e, id) {
@@ -1572,17 +1101,7 @@ async function ccSaveSlide(e, id) {
     let image = $("si").value;
     if ($("sfile").files[0]) image = await ccImageFile($("sfile").files[0]);
     if (!image) throw Error("Slide image is required");
-    const payload = {
-      image_url: image,
-      kicker: $("sk").value,
-      title: $("st").value,
-      description: $("sd").value,
-      button_text: $("sb").value,
-      target_category: $("scat").value,
-      sort_order: Number($("so").value) || 0,
-      duration_seconds: Number($("sdur").value) || 6,
-      active: $("sactive").checked
-    };
+    const payload = { image_url: image, kicker: $("sk").value, title: $("st").value, description: $("sd").value, button_text: $("sb").value, target_category: $("scat").value, sort_order: Number($("so").value) || 0, duration_seconds: Number($("sdur").value) || 6, active: $("sactive").checked };
     const q = id ? db.from("hero_slides").update(payload).eq("id", id) : db.from("hero_slides").insert(payload);
     const { error } = await q;
     if (error) throw error;
@@ -1592,59 +1111,29 @@ async function ccSaveSlide(e, id) {
   } catch (err) { toast(err.message); }
 }
 
-// ---------- EXPENSE FORM ----------
 async function ccExpenseForm() {
-  $("ccAdminContent").innerHTML = `
-    <div class="cc-card">
-      <h3>Add Expense</h3>
-      <form class="cc-form" onsubmit="ccSaveExpense(event)">
-        <div class="cc-field"><label>Title</label><input id="ccExTitle" required></div>
-        <div class="cc-field"><label>Category</label><select id="ccExCat"><option>Marketing</option><option>Shipping</option><option>Stock</option><option>Salary</option><option>Other</option></select></div>
-        <div class="cc-field"><label>Amount</label><input id="ccExAmount" type="number" step=".01" required></div>
-        <div class="cc-field"><label>Date</label><input id="ccExDate" type="date" value="${new Date().toISOString().split('T')[0]}"></div>
-        <div class="cc-field full"><label>Notes</label><textarea id="ccExNotes"></textarea></div>
-        <div class="cc-field full"><button class="cc-btn">Save Expense</button></div>
-      </form>
-    </div>
-  `;
+  $("ccAdminContent").innerHTML = `<div class="cc-card"><h3>Add Expense</h3><form class="cc-form" onsubmit="ccSaveExpense(event)"><div class="cc-field"><label>Title</label><input id="ccExTitle" required></div><div class="cc-field"><label>Category</label><select id="ccExCat"><option>Marketing</option><option>Shipping</option><option>Stock</option><option>Salary</option><option>Other</option></select></div><div class="cc-field"><label>Amount</label><input id="ccExAmount" type="number" step=".01" required></div><div class="cc-field"><label>Date</label><input id="ccExDate" type="date" value="${new Date().toISOString().split('T')[0]}"></div><div class="cc-field full"><label>Notes</label><textarea id="ccExNotes"></textarea></div><div class="cc-field full"><button class="cc-btn">Save Expense</button></div></form></div>`;
 }
 
 async function ccSaveExpense(e) {
   e.preventDefault();
-  const payload = {
-    title: $("ccExTitle").value,
-    category: $("ccExCat").value,
-    amount: Number($("ccExAmount").value),
-    expense_date: $("ccExDate").value,
-    notes: $("ccExNotes").value,
-    created_by: user?.id || null
-  };
+  const payload = { title: $("ccExTitle").value, category: $("ccExCat").value, amount: Number($("ccExAmount").value), expense_date: $("ccExDate").value, notes: $("ccExNotes").value, created_by: user?.id || null };
   const { error } = await db.from("expenses").insert(payload);
   if (error) return toast(error.message);
   toast("Expense saved");
   ccAdminPage("expenses");
 }
 
-// ---------- CENTRAL BRAIN SAVE ----------
 async function ccSaveCentral(e) {
   e.preventDefault();
-  const payload = {
-    brand_name: $("ccBrandName").value,
-    brand_icon: $("ccBrandIcon").value,
-    primary_color: $("ccPrimary").value,
-    accent_color: $("ccAccent").value,
-    announcement: $("ccAnnounce").value,
-    whatsapp: $("ccWa").value,
-    currency: $("ccCurr").value,
-    logo_url: $("ccLogo").value
-  };
+  const payload = { brand_name: $("ccBrandName").value, brand_icon: $("ccBrandIcon").value, primary_color: $("ccPrimary").value, accent_color: $("ccAccent").value, announcement: $("ccAnnounce").value, whatsapp: $("ccWa").value, currency: $("ccCurr").value, logo_url: $("ccLogo").value };
   const { error } = await db.from("store_settings").upsert({ id: 1, ...payload });
   if (error) return toast(error.message);
   await loadAll();
   toast("Global settings saved");
   ccAdminPage("central");
 }
-// expose new globals
+
 window.ccOpenAdmin = ccOpenAdmin;
 window.ccAdminExit = ccAdminExit;
 window.ccAdminPage = ccAdminPage;
